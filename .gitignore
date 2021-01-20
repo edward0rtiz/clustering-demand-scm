@@ -1,0 +1,15 @@
+# .gitignore.
+# Insert extra rules if you want
+# careful if remove some of rules. Data may be inserted git repository putting sentitive information in risk the data of our clients and their customers at risks.
+__pycache__/
+venv/
+*.zip
+.ipynb_checkpoints/
+logs/
+*.pyc
+*.tsv
+*.model
+*.npy
+.idea
+*.pdf
+*.vscode
