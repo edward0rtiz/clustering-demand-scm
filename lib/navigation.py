@@ -1,60 +1,51 @@
 import dash
 import os
 import dash_bootstrap_components as dbc
+import dash_core_components as dcc
 import dash_html_components as html
+from app import app
 
 
-KIWI_LOGO = "../static/logo2.png"
+KIWI_LOGO = "../static/logo.png"
 
 # hypelinks
 kiwibot = "https://www.kiwibot.com/"
 
 
-def navbar():
-    navbar = dbc.Navbar(
+SIDEBAR_STYLE = {
+    "position": "fixed",
+    "top": 0,
+    "left": 0,
+    "bottom": 0,
+    "width": "16rem",
+    "padding": "2rem 1rem",
+    "background-color": "#000000",  # f8f9fa
+}
+
+
+# Function for calling navigation bar
+def navigation_bar():
+    sidebar = html.Div(
         [
-            html.A(
-                # Use row and col to control vertical alignment of logo / brand
-                dbc.Row(
-                    [
-                        dbc.Col(html.Img(src=KIWI_LOGO, height="20px"))
-                        # dbc.Col(dbc.NavbarBrand("Navbar", className="ml-2")),
-                    ],
-                    align="center",
-                    no_gutters=True,
-                ),
-                href=kiwibot,
-                dbc.Row(< div class="collapse navbar-collapse" id="navbarColor02" >
-                         < ul class="navbar-nav mr-auto" >
-                         < li class="nav-item active" >
-                         < a class="nav-link" href="#" > Home
-                         < span class="sr-only" > (current) < /span >
-                         < / a > )
-            ], sticky="top",
-            color="#000000",
-            dark=True))
-
-    """),dbc.Row(children=[dbc.NavItem(dbc.NavLink("Analytics", href="/analytics")),
-                             dbc.NavItem(dbc.NavLink(
-                                 "Clusterization", href="/clusters")),
-                             dbc.NavItem(dbc.NavLink(
-                                 "About Us", href="/about", className='nav-item'))
-                             ]
-                   ), ],
-)"""
-
-    """navbar = dbc.NavbarSimple(
-        children=[
-            dbc.Button([html.Img(src=KIWI_LOGO, height="25px")],
-                       active=True, color="FFFFFF", align='left',
-                       href=kiwibot, className="ml-2"),
-            dbc.NavItem(dbc.NavLink("Analytics", href="/analytics")),
-            dbc.NavItem(dbc.NavLink("Clusterization", href="/clusters")),
-            dbc.NavItem(dbc.NavLink("About Us", href="/about")),
+            html.Img(src=KIWI_LOGO, height="40px"),
+            html.Hr(),
+            html.Hr(),
+            html.P(
+                "Analytical dashboard for strategic decisions",
+            ), html.Hr(),
+            dbc.Nav(
+                [
+                    dbc.NavLink("Descriptive Analytics",
+                                href="/analytics", active="exact"),
+                    dbc.NavLink("Clustering Analytics",
+                                href="/clustering", active="exact"),
+                    dbc.NavLink("About Us", href="/about", active="exact"),
+                ],
+                vertical=True,
+                pills=True,
+            ),
+            html.Div()
         ],
-        # brand=KIWI_LOGO,
-        sticky="top",
-        color="#000000",
-        dark=True,
-    )"""
-    return navbar
+        style=SIDEBAR_STYLE,
+    )
+    return sidebar
