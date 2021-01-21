@@ -13,3 +13,4 @@ logs/
 .idea
 *.pdf
 *.vscode
+*.env
