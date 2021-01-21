@@ -28,7 +28,7 @@ def download_s3_folder(bucket_name, s3_folder, local_dir=None):
         local_dir: a relative or absolute directory path in the local file system
     """
     bucket = s3.Bucket(bucket_name)
-    a = bucket.objects.filter(Prefix=s3_folder)
+
     for obj in bucket.objects.filter(Prefix=s3_folder):
         target = obj.key if local_dir is None \
             else os.path.join(local_dir, os.path.relpath(obj.key, s3_folder))
