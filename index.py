@@ -31,35 +31,26 @@ KIWI_LOGO = "../static/logo2.png"
 # hypelinks
 kiwibot = "https://www.kiwibot.com/"
 
+# the styles for the main content position it to the right of the sidebar and
+# add some padding.
+CONTENT_STYLE = {
+    "height": "100vh",
+    "margin-left": "10rem",
+    # "margin-right": "0rem",
+    # "margin-bottom": "150rem",
+    # "padding": "20rem 2rem",
+    "background-color": "#FFFFFF",
+}
 # Main layout: contains the main layot with multiple pages
+
+content = html.Div(id="page-content", style=CONTENT_STYLE)
 
 app.layout = html.Div(
     [
         dcc.Location(id="url", refresh=False),
-        navigation.navbar(),
-        html.Div(id="page-content"),
-        html.Div(
-            [
-                dbc.Alert(
-                    [
-                        dbc.Row(
-                            [
-                                dbc.Button(
-                                    [html.Img(src=KIWI_LOGO, height="20px")],
-                                    active=True,
-                                    href=kiwibot,
-                                    color="#000000",
-                                    className="bottom_logo",
-                                ),
-                            ]
-                        ),
-                    ],
-                    className="bottom_bar",
-                ),
-            ]
-        ),
-    ]
-)
+        navigation.navigation_bar(),
+        content
+    ])
 
 ###############################################
 #
@@ -72,6 +63,22 @@ app.layout = html.Div(
 #           APP INTERACTIVITY:
 #
 ###############################################
+@app.callback(Output("page-content", "children"), [Input("url", "pathname")])
+def render_page_content(pathname):
+    if pathname == "/analytics":
+        return html.P("This is the content of the home page!")
+    elif pathname == "/clustering":
+        return html.P("This is the content of page 1. Yay!")
+    elif pathname == "/about":
+        return html.P("Oh cool, this is page 2!")
+    # If the user tries to reach a different page, return a 404 message
+    return dbc.Jumbotron(
+        [
+            html.H1("404: Not found", className="text-danger"),
+            html.Hr(),
+            html.P(f"The pathname {pathname} was not recognised..."),
+        ]
+    )
 
 
 if __name__ == "__main__":
