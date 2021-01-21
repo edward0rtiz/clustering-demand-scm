@@ -8,7 +8,8 @@ from io import StringIO
 AWS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
 AWS_SECRET = os.environ.get('AWS_SECRET_ACCESS_KEY')
 bucket = "kiwi-bot"
-key = "ordersDB.csv"
+# key = "ordersDB.csv"
+prefix = 'databases_csv/'
 filename = "https://kiwi-bot.s3.us-east-2.amazonaws.com/ordersDB.csv"
 filepath = 'kiwi_bot\data\order.csv'
 
