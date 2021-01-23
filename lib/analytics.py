@@ -17,8 +17,19 @@ from lib import navigation
 
 from .data_engine.preprocessor import dfkiwer, dforder
 
+from lib.analytics_kiwers import kiwers_layout
+
 app = __import__("app").app
 
+more_info_text = """Lorem Ipsum is simply dummy text of the printing and 
+typesetting industry. Lorem Ipsum has been the industry's standard dummy 
+text ever since the 1500s, when an unknown printer took a galley of type 
+and scrambled it to make a type specimen book. It has survived not only 
+five centuries, but also the leap into electronic typesetting, remaining 
+essentially unchanged. It was popularised in the 1960s with the release 
+of Letraset sheets containing Lorem Ipsum passages, and more recently with 
+desktop publishing software like Aldus PageMaker including versions of Lorem 
+Ipsum"""
 
 layout_1 = dbc.Container(
     [
@@ -34,14 +45,19 @@ tab1_content = dbc.Card(
             html.Div(
                 [
                     dbc.Button(
-                        "More Info", id="alert-toggle-no-fade", className="mr-1"
+                        "More Info",
+                        id="collapse-button",
+                        className="mr-1",
+                        color="dark",
+                        outline=True,
                     ),
                     html.Hr(),
-                    dbc.Alert(
-                        "Select the type of chart you want to analyse",
-                        id="alert-no-fade",
-                        dismissable=True,
-                        is_open=True,
+                    dbc.Collapse(
+                        dbc.Card(
+                            dbc.CardBody(more_info_text, style={"color": "black"}),
+
+                        ),
+                        id="collapse"
                     ),
                 ]
             ),
@@ -51,14 +67,15 @@ tab1_content = dbc.Card(
                         [
                             dbc.Col(
                                 html.Div(
-                                    "insert KIWERS plots here",
+                                    kiwers_layout,
                                     style={"color": "#000000"},
                                 )
-                            )
+                            ),
                         ],
                         align="start",
                     ),
                 ],
+                fluid=True,
             ),
         ],
     ),
@@ -90,9 +107,11 @@ tab2_content = dbc.Card(
                     ),
                 ],
             ),
-        ]
+        ],
+
     ),
     className="mt-3",
+
 )
 
 # Component to call dashboard in tabs
@@ -115,13 +134,12 @@ def toggle_alert(n, is_open):
     return is_open
 
 
-# Callback function for message info
 @app.callback(
-    Output("alert-no-fade", "is_open"),
-    [Input("alert-toggle-no-fade", "n_clicks")],
-    [State("alert-no-fade", "is_open")],
+    Output("collapse", "is_open"),
+    [Input("collapse-button", "n_clicks")],
+    [State("collapse", "is_open")],
 )
-def toggle_alert_no_fade(n, is_open):
+def toggle_collapse(n, is_open):
     if n:
         return not is_open
     return is_open

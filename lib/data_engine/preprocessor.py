@@ -4,6 +4,8 @@ from datetime import datetime
 
 import numpy as np
 import pandas as pd
+import plotly.express as px
+
 
 # from .s3_download_all import df_kiwer, df_order
 
@@ -29,142 +31,154 @@ df_order = df_order.drop(["Unnamed: 0"], axis=1)
 dfkiwer = df_kiwer.copy()
 dforder = df_order.copy()
 
-# # Deleting unnecesary cols
-# dfkiwer = dfkiwer.drop(['epoch_timestamp'], axis=1)
-# dforder = dforder.drop(['readable_datetime'], axis=1)
+# Deleting unnecesary cols
+dfkiwer = dfkiwer.drop(['epoch_timestamp'], axis=1)
+dforder = dforder.drop(['readable_datetime'], axis=1)
 
-# # Transforming string to datetime
-# dfkiwer['readable_datetime'] = pd.to_datetime(
-#     dfkiwer['readable_datetime'], format='%Y-%m-%d %H:%M:%S')
+# Transforming string to datetime
+dfkiwer['readable_datetime'] = pd.to_datetime(
+    dfkiwer['readable_datetime'], format='%Y-%m-%d %H:%M:%S')
 
-# # Transforming from timestamp to datetime
-# dforder[['created', 'assigned', 'courier_arrived', 'picked_up',
-#          'bot_loaded', 'bot_dropped_off', 'waiting_for_client',
-#          'closed']] = dforder[['created', 'assigned',
-#                                'courier_arrived', 'picked_up', 'bot_loaded',
-#                                'bot_dropped_off', 'waiting_for_client',
-#                                'closed']].apply(pd.to_datetime, unit='ms',
-#                                                 origin='unix')
+# Transforming from timestamp to datetime
+dforder[['created', 'assigned', 'courier_arrived', 'picked_up',
+         'bot_loaded', 'bot_dropped_off', 'waiting_for_client',
+         'closed']] = dforder[['created', 'assigned',
+                               'courier_arrived', 'picked_up', 'bot_loaded',
+                               'bot_dropped_off', 'waiting_for_client',
+                               'closed']].apply(pd.to_datetime, unit='ms',
+                                                origin='unix')
 
-# # Converting to categorical
-# dforder['type_of_delivery'] = dforder.type_of_delivery.astype('category')
-# dforder['payment_method'] = dforder.payment_method.astype('category')
+# Converting to categorical
+dforder['type_of_delivery'] = dforder.type_of_delivery.astype('category')
+dforder['payment_method'] = dforder.payment_method.astype('category')
 
-# # fill nan values
-# dforder['order_tip'].fillna(0, inplace=True)
-# values_1 = {'kiwer': 'AndresCamiloAriza'}
+# fill nan values
+dforder['order_tip'].fillna(0, inplace=True)
+values_1 = {'kiwer': 'AndresCamiloAriza'}
 
-# dforder['bot_name'] = dforder['bot_name'].fillna(dforder['kiwer'])
-# dforder.loc[(dforder['bot_name'] == 'kiwibot204') & (dforder['kiwer'].isnull())] = dforder.loc[(
-#     dforder['bot_name'] == 'kiwibot204') & (dforder['kiwer'].isnull())].fillna(value=values_1)
-# dforder = dforder.dropna(subset=['kiwer'])
+dforder['bot_name'] = dforder['bot_name'].fillna(dforder['kiwer'])
+dforder.loc[(dforder['bot_name'] == 'kiwibot204') & (dforder['kiwer'].isnull())] = dforder.loc[(
+    dforder['bot_name'] == 'kiwibot204') & (dforder['kiwer'].isnull())].fillna(value=values_1)
+dforder = dforder.dropna(subset=['kiwer'])
 
-# # fill 0 values for nan
-# dforder[['client_lat', 'client_lng']] = dforder[[
-#     'client_lat', 'client_lng']].replace(0, np.NaN)
+# fill 0 values for nan
+dforder[['client_lat', 'client_lng']] = dforder[[
+    'client_lat', 'client_lng']].replace(0, np.NaN)
 
-# # replace value at restaunrat name fix typo of abbes pizza
-# dforder['restaurant_name'] = dforder['restaurant_name'].replace(
-#     'Abes pizza', "Abe's Pizza")
+# replace value at restaunrat name fix typo of abbes pizza
+dforder['restaurant_name'] = dforder['restaurant_name'].replace(
+    'Abes pizza', "Abe's Pizza")
 
-# # fill nan in client_lat and client_lng
-# dforder = dforder.sort_values(by='client_readable_address')
-# dforder[['client_lat', 'client_lng']] = dforder[[
-#     'client_lat',	'client_lng']].ffill()
-# dforder = dforder.sort_values(by=['client_lat', 'client_lng'])
-# dforder['client_readable_address'] = dforder['client_readable_address'].ffill()
+# fill nan in client_lat and client_lng
+dforder = dforder.sort_values(by='client_readable_address')
+dforder[['client_lat', 'client_lng']] = dforder[[
+    'client_lat',	'client_lng']].ffill()
+dforder = dforder.sort_values(by=['client_lat', 'client_lng'])
+dforder['client_readable_address'] = dforder['client_readable_address'].ffill()
 
-# # Create total price
-# dforder['total_cost'] = dforder['price_with_discounts'] + \
-#     dforder['delivey_fee'] + dforder['order_tax']
+# Create total price
+dforder['total_cost'] = dforder['price_with_discounts'] + \
+    dforder['delivey_fee'] + dforder['order_tax']
 
-# # create weekday, month and hour
-# dforder['hour'] = dforder['created'].dt.hour
-# dforder['month'] = dforder['created'].dt.month
-# dforder['weekday'] = dforder['created'].dt.day_name()
-# dforder['week_no'] = dforder['created'].dt.strftime('%U')
+# create weekday, month and hour
+dforder['hour'] = dforder['created'].dt.hour
+dforder['month'] = dforder['created'].dt.month
+dforder['weekday'] = dforder['created'].dt.day_name()
+dforder['week_no'] = dforder['created'].dt.strftime('%U')
 
-# # create column diff_closed
-# dforder['diff_closed'] = dforder['closed'] - dforder['waiting_for_client']
-# dforder['diff_closed'] = dforder['diff_closed'].dt.total_seconds()/60
-
-
-# # Setting up conditions to see if order was approved, error or canceled
-# conditions = [(((dforder['client_lat'] == dforder['restaurant_lat']) & (dforder['client_lng'] == dforder['restaurant_lng']) & (dforder['accepted_by_restaurant'].isna()))),
-#               (((dforder['client_lat'] != dforder['restaurant_lat']) & (dforder['client_lng']
-#                                                                         != dforder['restaurant_lng']) & (dforder['accepted_by_restaurant'].isna()))),
-#               ((dforder['load_battery'] == 100) &
-#                (dforder['wait_battery'] == 100)),
-#               (((dforder['load_battery'] == 100) & (dforder['wait_battery'] == 100)) & (dforder['accepted_by_restaurant'] is None))]
-# values = ['canceled', 'accepted', 'error', 'canceled']
-# dforder['order_status'] = np.select(conditions, values)
-
-# # replace value 0 by approved
-# dforder["order_status"].replace({"0": "accepted"}, inplace=True)
-
-# # Converting the status to categorical
-# dforder['order_status'] = dforder.order_status.astype('category')
-
-# # Convert readable datetime to datetime
-# dfkiwer['readable_datetime'] = pd.to_datetime(dfkiwer['readable_datetime'])
+# create column diff_closed
+dforder['diff_closed'] = dforder['closed'] - dforder['waiting_for_client']
+dforder['diff_closed'] = dforder['diff_closed'].dt.total_seconds()/60
 
 
-# ###########################################################
-# #
-# #          Dfkiwers preprocessing dataframes for plots
-# #
-# ###########################################################
+# Setting up conditions to see if order was approved, error or canceled
+conditions = [(((dforder['client_lat'] == dforder['restaurant_lat']) & (dforder['client_lng'] == dforder['restaurant_lng']) & (dforder['accepted_by_restaurant'].isna()))),
+              (((dforder['client_lat'] != dforder['restaurant_lat']) & (dforder['client_lng']
+                                                                        != dforder['restaurant_lng']) & (dforder['accepted_by_restaurant'].isna()))),
+              ((dforder['load_battery'] == 100) &
+               (dforder['wait_battery'] == 100)),
+              (((dforder['load_battery'] == 100) & (dforder['wait_battery'] == 100)) & (dforder['accepted_by_restaurant'] is None))]
+values = ['canceled', 'accepted', 'error', 'canceled']
+dforder['order_status'] = np.select(conditions, values)
 
-# # Extract relevant information from date and time to perform EDA
-# dfkiwer['weekday'] = dfkiwer['readable_datetime'].dt.day_name()
-# dfkiwer['week'] = dfkiwer['readable_datetime'].dt.week
-# dfkiwer['month'] = dfkiwer['readable_datetime'].dt.month
+# replace value 0 by approved
+dforder["order_status"].replace({"0": "accepted"}, inplace=True)
 
+# Converting the status to categorical
+dforder['order_status'] = dforder.order_status.astype('category')
 
-# ################ [Data Plot 1/7] Logs by day ###################
-# # Converting weekdays to categoricals, and setting days orders.
-# dfkiwer['weekday'] = pd.Categorical(dfkiwer['weekday'], categories=['Monday',
-#                                                                     'Tuesday',
-#                                                                     'Wednesday',
-#                                                                     'Thursday',
-#                                                                     'Friday',
-#                                                                     'Saturday',
-#                                                                     'Sunday'],
-#                                     ordered=True)
-
-# dfkiwer_days = dfkiwer['weekday'].value_counts(
-#     sort=False).rename_axis('Weekday').reset_index(name='Logs')
+# Convert readable datetime to datetime
+dfkiwer['readable_datetime'] = pd.to_datetime(dfkiwer['readable_datetime'])
 
 
-# ############ [Data Plot 2/7] Evolution of Weekdays ###############
-# # Create a dataframe with the groupby of weekday and month
-# multiple_weekday = dfkiwer.groupby(by=['weekday', 'month'], as_index=False)[
-#     'username'].count()
+###########################################################
+#
+#          Dfkiwers preprocessing dataframes for plots
+#
+###########################################################
 
-# ################ [Data Plot 3/7] Total logs by hour ################
-# # Create a dataframe with the kiwers total count per hours
-# dfkiwer_hours = dfkiwer['readable_datetime'].dt.hour.value_counts(
-#     sort=False).rename_axis('Hour').reset_index(name='Logs')
+# Extract relevant information from date and time to perform EDA
+dfkiwer['weekday'] = dfkiwer['readable_datetime'].dt.day_name()
+dfkiwer['week'] = dfkiwer['readable_datetime'].dt.week
+dfkiwer['month'] = dfkiwer['readable_datetime'].dt.month
 
-# ######## [Data Plot 4/7] Evolution of each hour by month ###############
-# # Create a dataframe of kiwers hours per month
-# dfkiwer['hour'] = dfkiwer['readable_datetime'].dt.hour
-# kiwers_hxm = dfkiwer.groupby(by=['hour', 'month'], as_index=False)[
-#     'username'].count()
+############ [Data Plot 1/9] Historial logs by dates ###############
+dfkiwer_dates = dfkiwer['readable_datetime'].dt.date.rename_axis('Date').\
+    reset_index().sort_values('readable_datetime').\
+    value_counts('readable_datetime', sort=False).rename_axis('Date').\
+    reset_index(name='Logs')
 
-# ################ [Data Plot 5/7] Logs by month ###############
-# # Create a dataframe of kiwers month value counts
-# dfkiwer_month = dfkiwer.value_counts(
-#     'month', sort=False).rename_axis('Month').reset_index(name='Logs')
+################ [Data Plot 2/9] Logs by day ###################
+# Converting weekdays to categoricals, and setting days orders.
+dfkiwer['weekday'] = pd.Categorical(dfkiwer['weekday'], categories=['Monday',
+                                                                    'Tuesday',
+                                                                    'Wednesday',
+                                                                    'Thursday',
+                                                                    'Friday',
+                                                                    'Saturday',
+                                                                    'Sunday'],
+                                    ordered=True)
 
-# ################ [Data Plot 6/7] Logs by week ###############
-# dfkiwer_weeks = dfkiwer.value_counts(
-#     'week', sort=False).rename_axis('Week').reset_index(name='Logs')
+dfkiwer_days = dfkiwer['weekday'].value_counts(
+    sort=False).rename_axis('Weekday').reset_index(name='Logs')
 
-# ################ [Data Plot 7/7] Evolution of day by weeks ###############
-# kiwers_dxw = dfkiwer.groupby(by=['weekday', 'week'], as_index=False)[
-#     'username'].count()
 
+############ [Data Plot 3/9] Evolution of Weekdays ###############
+# Create a dataframe with the groupby of weekday and month
+multiple_weekday = dfkiwer.groupby(by=['weekday', 'month'], as_index=False)[
+    'username'].count()
+
+################ [Data Plot 4/9 Total logs by hour ################
+# Create a dataframe with the kiwers total count per hours
+dfkiwer_hours = dfkiwer['readable_datetime'].dt.hour.value_counts(
+    sort=False).rename_axis('Hour').reset_index(name='Logs')
+
+######## [Data Plot 5/9] Evolution of each hour by month ###############
+# Create a dataframe of kiwers hours per month
+dfkiwer['hour'] = dfkiwer['readable_datetime'].dt.hour
+kiwers_hxm = dfkiwer.groupby(by=['hour', 'month'], as_index=False)[
+    'username'].count()
+
+################ [Data Plot 6/9] Logs by month ###############
+# Create a dataframe of kiwers month value counts
+dfkiwer_month = dfkiwer.value_counts(
+    'month', sort=False).rename_axis('Month').reset_index(name='Logs')
+
+################ [Data Plot 7/9] Logs by week ###############
+dfkiwer_weeks = dfkiwer.value_counts(
+    'week', sort=False).rename_axis('Week').reset_index(name='Logs')
+
+################ [Data Plot 8/9] Evolution of day by weeks #############
+kiwers_dayxw = dfkiwer.groupby(by=['weekday', 'week'], as_index=False)[
+    'username'].count()
+
+###################[Data Plot 9/9] Logs Location ######################
+#MAP
+kiwer_map = px.scatter_mapbox(df_kiwer, lat="lat", lon="lng",
+                        color_discrete_sequence=["fuchsia"], zoom=1,
+                        height=400)
+kiwer_map.update_layout(mapbox_style="open-street-map")
+kiwer_map.update_layout(margin={"r":0,"t":0,"l":0,"b":0})
 
 # ###########################################################
 # #

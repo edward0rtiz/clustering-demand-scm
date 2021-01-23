@@ -25,4 +25,4 @@ cache = Cache(app.server, config={
 server = app.server
 
 # We need this for function callbacks not present in the app.layout
-app.config.suppress_callback_exceptions = False
+app.config.suppress_callback_exceptions = True

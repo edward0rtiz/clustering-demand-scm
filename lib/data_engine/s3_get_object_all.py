@@ -10,7 +10,7 @@ from botocore.exceptions import ClientError
 AWS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID")
 AWS_SECRET = os.environ.get("AWS_SECRET_ACCESS_KEY")
 bucket = "kiwi-bot"
-prefix = "databases_csv/"
+prefix = "data/"
 
 s3 = boto3.client(
     "s3",
