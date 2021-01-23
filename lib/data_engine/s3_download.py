@@ -20,4 +20,4 @@ s3 = boto3.client(
 )
 
 # This code extract single object specified manually in the path
-s3.download_file(Bucket=buckets3, Filename=filepath, Key=key)
+# s3.download_file(Bucket=buckets3, Filename=filepath, Key=key)
