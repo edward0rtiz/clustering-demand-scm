@@ -1,0 +1,49 @@
+/*This document contains the styles that use the app. You can change these as you wish.*/
+
+
+/* About us*/
+.container-profile{
+    /*margin-top: 200px;*/
+    margin: 150px 0.05px 150px 150px
+    
+}
+
+.img_marg{
+    border-radius: 125px;
+    border: 1px, solid;
+    border-color: #FAFAFA;
+    background-color: #FAFAFA;
+    margin: 10px auto;
+    display: block;
+}
+
+.H5_margin{
+    color: #8190A5;
+    margin-top: 20px;
+    text-align: center;
+}
+.P_margin{
+    color: #8190A5;
+    margin-top: 0px;
+    text-align: center;
+}
+
+.logo_correo{
+    border-radius: 12px;
+    margin: 5px 0.05px 5px 0.05px;
+}
+
+.correo_marg{
+    border-radius: 35px;
+    margin: auto auto auto 210px;
+}
+
+.correo_marg_d{
+    border-radius: 35px;
+    margin: auto auto auto 495px;
+}
+
+.In_marg{
+    border-radius: 25px;
+    margin: auto auto auto 20px;
+}
