@@ -6,7 +6,7 @@ import dash_core_components as dcc
 import dash_html_components as html
 from app import app
 
-from lib import analytics, clustering
+from lib import analytics, clustering, home, about
 
 KIWI_LOGO = "../assets/logo.png"
 
@@ -30,35 +30,60 @@ def navigation_bar():
     sidebar = html.Div(
         [
             dbc.Button(
-                [html.Img(src=KIWI_LOGO, height="40px")],
+                [html.Img(src=KIWI_LOGO, style={"width": "100%"}, alt="Null")],
                 href=kiwibot,
                 color="None",
                 block=True,
             ),
             html.Hr(),
-            html.H4(
-                "Analytical dashboard for strategic decisions",
-                style={"font-size": "1.2rem", "height": "60px", "text-align": "center"},
-            ),
+            # html.H4(
+            #    "Analytical dashboard for strategic decisions",
+            #    style={"font-size": "1.2rem", "height": "60px", "text-align": "center"},
+            # ),
+            html.Hr(),
+            html.Hr(),
+            html.Hr(),
             dbc.Nav(
                 [
+                    dbc.NavLink(
+                        "Home",
+                        href="/home",
+                        active=True,
+                        style={
+                            "width": "100%",
+                            "font-size": "1rem",
+                            "color": "#FFFFFF",
+                        },
+                    ),
                     dbc.NavLink(
                         "Descriptive Analytics",
                         href="/analytics",
                         active=True,
-                        style={"font-size": "1rem", "color": "#FFFFFF"},
+                        style={
+                            "width": "100%",
+                            "font-size": "1rem",
+                            "color": "#FFFFFF",
+                        },
                     ),
                     dbc.NavLink(
                         "Clustering Analytics",
                         href="/clustering",
                         active=True,
-                        style={"font-size": "1rem", "color": "#FFFFFF"},
+                        style={
+                            "width": "100%",
+                            "font-size": "1rem",
+                            "color": "#FFFFFF",
+                        },
                     ),
                     dbc.NavLink(
                         "About Us",
                         href="/about",
                         active=True,
-                        style={"font-size": "1rem", "color": "#FFFFFF"},
+                        style={
+                            "width": "100%",
+                            "font-size": "1rem",
+                            "color": "#FFFFFF",
+                        },
                     ),
                 ],
                 vertical=True,
@@ -70,8 +95,15 @@ def navigation_bar():
                     dbc.Row(
                         dbc.Col(
                             html.Div("Copyright © 2021", style={"font-size": "0.8rem"}),
-                            style={"right": "-3em", "bottom": "-40em"},
-                        )
+                            style={
+                                "right": "-10px",
+                                "bottom": "-600px",
+                                "width": "100%",
+                                # "height": "100%",
+                                # "object-fit": "cover",
+                            },
+                        ),
+                        style={"position": "absolute"},
                     ),
                 ]
             ),
@@ -79,6 +111,21 @@ def navigation_bar():
         style=SIDEBAR_STYLE,
     )
     return sidebar
+
+
+def home_page():
+    home_content = dbc.Container(
+        [
+            dbc.Row(
+                [
+                    dbc.Col(html.Div(navigation_bar()), width=2),
+                    dbc.Col([html.Br(), html.Div(home.home_layout)], width=10),
+                ]
+            )
+        ],
+        fluid=True,
+    )
+    return home_content
 
 
 def content_eda():
@@ -109,3 +156,18 @@ def content_cluster():
         fluid=True,
     )
     return content_2
+
+
+def about_page():
+    about_content = dbc.Container(
+        [
+            dbc.Row(
+                [
+                    dbc.Col(html.Div(navigation_bar()), width=2),
+                    dbc.Col([html.Br(), html.Div(about.about_layout)], width=10),
+                ]
+            )
+        ],
+        fluid=True,
+    )
+    return about_content
