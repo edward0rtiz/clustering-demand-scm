@@ -16,12 +16,12 @@ from lib.data_engine.preprocessor import (dfkiwer_dates, dfkiwer_hours,
 app = __import__("app").app
 
 # Radios components
-radios_line = dbc.FormGroup(
+radios_line_k = dbc.FormGroup(
     [
         dbc.Label("Total Logs", html_for="example-radios-row", width=4),
         dbc.Col(
             dbc.RadioItems(
-                id="chart-type-line",
+                id="chart-type-line-k",
                 options=[
                     {"label": "By date", "value": "By date"},
                     {"label": "By days", "value": "By days"},
@@ -39,12 +39,12 @@ radios_line = dbc.FormGroup(
     row=True,
 )
 
-radios_evo = dbc.FormGroup(
+radios_evo_k = dbc.FormGroup(
     [
         dbc.Label("Evolutions", html_for="example-radios-row", width=4),
         dbc.Col(
             dbc.RadioItems(
-                id="chart-type-evo",
+                id="chart-type-evo-k",
                 options=[
                     {"label": "Weekday by month", "value": "Weekday by month"},
                     {"label": "Hour by month", "value": "Hour by month"},
@@ -58,12 +58,12 @@ radios_evo = dbc.FormGroup(
     ],
     row=True,
 )
-radios_bar = dbc.FormGroup(
+radios_bar_k = dbc.FormGroup(
     [
         dbc.Label("Logs", html_for="example-radios-row", width=4),
         dbc.Col(
             dbc.RadioItems(
-                id="chart-type-bar",
+                id="chart-type-bar-k",
                 options=[
                     {"label": "By month", "value": "By month"},
                     {"label": "By week", "value": "By week"},
@@ -96,13 +96,13 @@ kiwers_layout = [
         [
             dbc.Col(
                 html.Div(
-                    radios_line,
+                    radios_line_k,
                     style=div_style,
                 ),
                 md=4),
             dbc.Col(
                 html.Div(
-                    dcc.Graph(id="plot-line"),
+                    dcc.Graph(id="plot-line-k"),
                     style=div_style_plot,
                 ),
                 md=8
@@ -114,14 +114,14 @@ kiwers_layout = [
         [
             dbc.Col(
                 html.Div(
-                    radios_evo,
+                    radios_evo_k,
                     style=div_style,
                 ),
                 md=4
             ),
             dbc.Col(
                 html.Div(
-                    dcc.Graph(id="plot-evo"),
+                    dcc.Graph(id="plot-evo-k"),
                     style=div_style_plot,
                 ),
                 md=8
@@ -133,14 +133,14 @@ kiwers_layout = [
         [
             dbc.Col(
                 html.Div(
-                    radios_bar,
+                    radios_bar_k,
                     style=div_style,
                 ),
                 md=4
             ),
             dbc.Col(
                 html.Div(
-                    dcc.Graph(id="plot-bar"),
+                    dcc.Graph(id="plot-bar-k"),
                     style=div_style_plot,
                 ),
                 md=8)
@@ -154,8 +154,8 @@ kiwers_layout = [
 
 # Callback for line
 @app.callback(
-    Output("plot-line", "figure"),
-    Input("chart-type-line", "value"),
+    Output("plot-line-k", "figure"),
+    Input("chart-type-line-k", "value"),
 )
 def update_output(chart_type):
     plots = {'By date': {'df': dfkiwer_dates,
@@ -190,41 +190,33 @@ def update_output(chart_type):
 
 # Callback for evolution plot
 @app.callback(
-    Output("plot-evo", "figure"),
-    Input("chart-type-evo", "value"),
+    Output("plot-evo-k", "figure"),
+    Input("chart-type-evo-k", "value"),
 )
 def update_output(chart_type):
-    plots = {"Weekday by month": {'df': multiple_weekday,
-                                  'x': "month",
-                                  "y": "username",
-                                  "color": "weekday",
-                                  "labels": {'weekday': 'weekday',
-                                             'username': 'log',
-                                             'month': 'month'},
-                                  "title": "Evolution of weekday"},
+    plots = {"Weekday by month":{'df': multiple_weekday,
+                                 'x': "month",
+                                 "y": "username",
+                                 "color": "weekday",
+                                 "labels": {'weekday': 'weekday', 'username': 'log', 'month': 'month'},
+                                 "title":"Evolution of weekday"},
              "Hour by month": {'df': kiwers_hxm,
-                               'x': "month",
-                               "y": "username",
-                               "color": "hour",
-                               "labels": {'weekday': 'weekday',
-                                          'username': 'log',
-                                          'hour': 'hour'},
-                               "title": "Evolution of each hour by month"},
+                                'x': "month",
+                                "y": "username",
+                                "color": "hour",
+                                "labels": {'weekday': 'weekday', 'username': 'log', 'hour': 'hour'},
+                                "title":"Evolution of each hour by month"},
              "Month by hour": {'df': kiwers_hxm,
-                               'x': "hour",
-                               "y": "username",
-                               "color": "month",
-                               "labels": {'weekday': 'weekday',
-                                          'username': 'log',
-                                          'hour': 'hour'},
-                               "title": "Evolution of month by hour"},
+                                'x': "hour",
+                                "y": "username",
+                                "color": "month",
+                                "labels": {'weekday': 'weekday', 'username': 'log', 'hour': 'hour'},
+                                "title":"Evolution of month by hour"},
              "Day by weeks": {'df': kiwers_dayxw,
                               'x': "week",
                               "y": "username",
                               "color": "weekday",
-                              "labels": {'weekday': 'weekday',
-                                         'username': 'log',
-                                         'week': 'week'},
+                              "labels": {'weekday': 'weekday', 'username': 'log', 'week': 'week'},
                               "title": "Evolution of day by weeks"},
 
              }
@@ -249,8 +241,8 @@ def update_output(chart_type):
 
 # Callback for barplot
 @app.callback(
-    Output("plot-bar", "figure"),
-    Input("chart-type-bar", "value"),
+    Output("plot-bar-k", "figure"),
+    Input("chart-type-bar-k", "value"),
 )
 def update_output(chart_type):
     plots = {'By month': {'df': dfkiwer_month,

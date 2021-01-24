@@ -18,6 +18,7 @@ from lib import navigation
 from .data_engine.preprocessor import dfkiwer, dforder
 
 from lib.analytics_kiwers import kiwers_layout
+from lib.analytics_orders import orders_layout
 
 app = __import__("app").app
 
@@ -88,21 +89,33 @@ tab2_content = dbc.Card(
         [
             html.Div(
                 [
-                    dbc.Button("More Info", id="alert-toggle-fade", className="mr-1"),
+                    dbc.Button(
+                        "More Info",
+                        id="collapse-button",
+                        className="mr-1",
+                        color="dark",
+                        outline=True,
+                    ),
                     html.Hr(),
-                    dbc.Alert(
-                        "Select the type of chart you want to analyse",
-                        id="alert-fade",
-                        dismissable=True,
-                        fade=False,
-                        duration=4000,
+                    dbc.Collapse(
+                        dbc.Card(
+                            dbc.CardBody(more_info_text, style={"color": "black"}),
+
+                        ),
+                        id="collapse"
                     ),
                 ]
             ),
             dbc.Container(
                 [
                     dbc.Row(
-                        [dbc.Col(html.Div("insert plots here"))],
+                        [
+                            dbc.Col(
+                                html.Div(
+                                    orders_layout,
+                                    style={"color": "#000000"},)
+                            )
+                        ],
                         align="start",
                     ),
                 ],
