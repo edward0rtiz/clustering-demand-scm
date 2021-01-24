@@ -9,7 +9,7 @@ from dash.dependencies import ClientsideFunction, Input, Output, State
 from dash.exceptions import PreventUpdate
 
 from app import app, server
-from lib import analytics, clustering, navigation
+from lib import navigation
 
 # APP LAYOUT:
 app.layout = html.Div(
@@ -23,12 +23,14 @@ app.layout = html.Div(
 # APP INTERACTIVITY:
 @app.callback(Output("page-content", "children"), [Input("url", "pathname")])
 def render_page_content(pathname):
+    if (pathname == "/") or (pathname == "/home"):
+        return navigation.home_page()
     if (pathname == "/analytics") or (pathname == "/"):
         return navigation.content_eda()
     if pathname == "/clustering":
         return navigation.content_cluster()
     elif pathname == "/about":
-        return navigation.content_eda()
+        return navigation.about_page()
 
 
 if __name__ == "__main__":
