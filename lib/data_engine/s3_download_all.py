@@ -11,7 +11,7 @@ AWS_SECRET = os.environ.get("AWS_SECRET_ACCESS_KEY")
 
 # Information of origin bucket and directory to download files
 bucket = "kiwi-bot"
-s3_folder = "databases_csv/"
+s3_folder = "data/"
 filepath = "/data"
 
 s3 = boto3.resource(
