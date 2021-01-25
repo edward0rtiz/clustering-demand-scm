@@ -19,9 +19,19 @@ from .data_engine.preprocessor import dfkiwer, dforder
 app = __import__("app").app
 
 
+more_info_text = """Lorem Ipsum is simply dummy text of the printing and 
+typesetting industry. Lorem Ipsum has been the industry's standard dummy 
+text ever since the 1500s, when an unknown printer took a galley of type 
+and scrambled it to make a type specimen book. It has survived not only 
+five centuries, but also the leap into electronic typesetting, remaining 
+essentially unchanged. It was popularised in the 1960s with the release 
+of Letraset sheets containing Lorem Ipsum passages, and more recently with 
+desktop publishing software like Aldus PageMaker including versions of Lorem 
+Ipsum"""
+
 layout_2 = dbc.Container(
     [
-        html.H1("Clustering Reporting", style={"color": "#000000"}),
+        html.H1("Clustering Reporting"),
     ],
     fluid=True,
 )
@@ -32,14 +42,18 @@ tab_c1_content = dbc.Card(
             html.Div(
                 [
                     dbc.Button(
-                        "More Info", id="alert-toggle-no-fade-2", className="mr-1"
+                        "More Info",
+                        id="collapse-button-3",
+                        className="mr-1",
+                        color="dark",
+                        outline=True,
                     ),
                     html.Hr(),
-                    dbc.Alert(
-                        "Select the type of chart you want to analyse",
-                        id="alert-no-fade-2",
-                        dismissable=True,
-                        is_open=True,
+                    dbc.Collapse(
+                        dbc.Card(
+                            dbc.CardBody(more_info_text, className="card-analytics"),
+                        ),
+                        id="collapse-3",
                     ),
                 ]
             ),
@@ -50,7 +64,7 @@ tab_c1_content = dbc.Card(
                             dbc.Col(
                                 html.Div(
                                     "insert KIWERS CLUSTplots here",
-                                    style={"color": "#000000"},
+                                    className="layout-text",
                                 )
                             )
                         ],
@@ -69,21 +83,33 @@ tab_c2_content = dbc.Card(
         [
             html.Div(
                 [
-                    dbc.Button("More Info", id="alert-toggle-fade-2", className="mr-1"),
+                    dbc.Button(
+                        "More Info",
+                        id="collapse-button-4",
+                        className="mr-1",
+                        color="dark",
+                        outline=True,
+                    ),
                     html.Hr(),
-                    dbc.Alert(
-                        "Select the type of chart you want to analyse",
-                        id="alert-fade-2",
-                        dismissable=True,
-                        fade=False,
-                        duration=4000,
+                    dbc.Collapse(
+                        dbc.Card(
+                            dbc.CardBody(more_info_text, className="card-analytics"),
+                        ),
+                        id="collapse-4",
                     ),
                 ]
             ),
             dbc.Container(
                 [
                     dbc.Row(
-                        [dbc.Col(html.Div("insert ORDERS CLUSTplots here"))],
+                        [
+                            dbc.Col(
+                                html.Div(
+                                    "insert ORDERS CLUSTplots here",
+                                    className="layout-text",
+                                )
+                            )
+                        ],
                         align="start",
                     ),
                 ],
@@ -104,23 +130,22 @@ clustering_tab = dbc.Tabs(
 
 
 @app.callback(
-    Output("alert-fade-2", "is_open"),
-    [Input("alert-toggle-fade-2", "n_clicks")],
-    [State("alert-fade-2", "is_open")],
+    Output("collapse-3", "is_open"),
+    [Input("collapse-button-3", "n_clicks")],
+    [State("collapse-3", "is_open")],
 )
-def toggle_alert_2(n, is_open):
+def toggle_collapse3(n, is_open):
     if n:
         return not is_open
     return is_open
 
 
-# Callback function for message info
 @app.callback(
-    Output("alert-no-fade-2", "is_open"),
-    [Input("alert-toggle-no-fade-2", "n_clicks")],
-    [State("alert-no-fade-2", "is_open")],
+    Output("collapse-4", "is_open"),
+    [Input("collapse-button-4", "n_clicks")],
+    [State("collapse-4", "is_open")],
 )
-def toggle_alert_no_fade_2(n, is_open):
+def toggle_collapse_4(n, is_open):
     if n:
         return not is_open
     return is_open

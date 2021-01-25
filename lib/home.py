@@ -20,31 +20,17 @@ home_layout = dbc.Container(
                                     [
                                         html.H1(
                                             "Kiwibot Analytical Dashboard",
-                                            style={
-                                                "color": "#000000",
-                                                "font-size": "50px",
-                                                "line-height": "40px",
-                                                "letter-spacing": "-2px",
-                                            },
+                                            className="home-title",
                                         ),
                                         html.H4(
-                                            "Kiwibot Analytical Dashboard",
-                                            style={
-                                                "color": "#000000",
-                                                "font-size": "18px",
-                                                "line-height": "40px",
-                                                "letter-spacing": "-2px",
-                                            },
+                                            "KAD is a tool for get comprehensive analytics about kiwibot\
+                                                business and create strategies for supply the demand of kiwibots\
+                                                    in key areas based in a cluster prediction of hot spot zones.\
+                                                        To use this tool select in the navigation bar the ",
+                                            className="home-subtitle",
                                         ),
                                     ],
-                                    style={
-                                        "width": "100%",
-                                        "margin-top": "100px",
-                                        "margin-bottom": "-40px",
-                                        # "font-size": "50px",
-                                        # "line-height": "100px",
-                                        # "letter-spacing": "-2px",
-                                    },
+                                    className="home-main",
                                 ),
                                 html.Video(
                                     src=SRC_VIDEO,

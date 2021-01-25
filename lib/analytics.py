@@ -34,7 +34,7 @@ Ipsum"""
 
 layout_1 = dbc.Container(
     [
-        html.H1("Descriptive Reporting", style={"color": "#000000"}),
+        html.H1("Descriptive Reporting"),
     ],
     fluid=True,
 )
@@ -55,10 +55,9 @@ tab1_content = dbc.Card(
                     html.Hr(),
                     dbc.Collapse(
                         dbc.Card(
-                            dbc.CardBody(more_info_text, style={"color": "black"}),
-
+                            dbc.CardBody(more_info_text, className="card-analytics"),
                         ),
-                        id="collapse"
+                        id="collapse",
                     ),
                 ]
             ),
@@ -69,7 +68,7 @@ tab1_content = dbc.Card(
                             dbc.Col(
                                 html.Div(
                                     kiwers_layout,
-                                    style={"color": "#000000"},
+                                    className="layout-text",
                                 )
                             ),
                         ],
@@ -91,7 +90,7 @@ tab2_content = dbc.Card(
                 [
                     dbc.Button(
                         "More Info",
-                        id="collapse-button",
+                        id="collapse-button-2",
                         className="mr-1",
                         color="dark",
                         outline=True,
@@ -99,10 +98,9 @@ tab2_content = dbc.Card(
                     html.Hr(),
                     dbc.Collapse(
                         dbc.Card(
-                            dbc.CardBody(more_info_text, style={"color": "black"}),
-
+                            dbc.CardBody(more_info_text, className="card-analytics"),
                         ),
-                        id="collapse"
+                        id="collapse-2",
                     ),
                 ]
             ),
@@ -113,7 +111,8 @@ tab2_content = dbc.Card(
                             dbc.Col(
                                 html.Div(
                                     orders_layout,
-                                    style={"color": "#000000"},)
+                                    className="layout-text",
+                                ),
                             )
                         ],
                         align="start",
@@ -121,10 +120,8 @@ tab2_content = dbc.Card(
                 ],
             ),
         ],
-
     ),
     className="mt-3",
-
 )
 
 # Component to call dashboard in tabs
@@ -137,22 +134,22 @@ analytics_tab = dbc.Tabs(
 
 
 @app.callback(
-    Output("alert-fade", "is_open"),
-    [Input("alert-toggle-fade", "n_clicks")],
-    [State("alert-fade", "is_open")],
+    Output("collapse", "is_open"),
+    [Input("collapse-button", "n_clicks")],
+    [State("collapse", "is_open")],
 )
-def toggle_alert(n, is_open):
+def toggle_collapse(n, is_open):
     if n:
         return not is_open
     return is_open
 
 
 @app.callback(
-    Output("collapse", "is_open"),
-    [Input("collapse-button", "n_clicks")],
-    [State("collapse", "is_open")],
+    Output("collapse-2", "is_open"),
+    [Input("collapse-button-2", "n_clicks")],
+    [State("collapse-2", "is_open")],
 )
-def toggle_collapse(n, is_open):
+def toggle_collapse_2(n, is_open):
     if n:
         return not is_open
     return is_open

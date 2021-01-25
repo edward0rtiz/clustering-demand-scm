@@ -14,101 +14,59 @@ KIWI_LOGO = "../assets/logo.png"
 kiwibot = "https://www.kiwibot.com/"
 
 
-SIDEBAR_STYLE = {
-    "position": "fixed",
-    "top": 0,
-    "left": 0,
-    "bottom": 0,
-    "width": "16%",
-    "padding": "2rem 1rem",
-    "background-color": "#000000",
-}
-
-
 # Function for calling navigation bar
 def navigation_bar():
     sidebar = html.Div(
         [
             dbc.Button(
-                [html.Img(src=KIWI_LOGO, style={"width": "100%"}, alt="Null")],
+                [html.Img(src=KIWI_LOGO, className="nav-img")],
                 href=kiwibot,
                 color="None",
                 block=True,
             ),
-            html.Hr(),
-            # html.H4(
-            #    "Analytical dashboard for strategic decisions",
-            #    style={"font-size": "1.2rem", "height": "60px", "text-align": "center"},
-            # ),
-            html.Hr(),
-            html.Hr(),
-            html.Hr(),
             dbc.Nav(
                 [
                     dbc.NavLink(
                         "Home",
                         href="/home",
-                        active=True,
-                        style={
-                            "width": "100%",
-                            "font-size": "1rem",
-                            "color": "#FFFFFF",
-                        },
+                        # active=True,
+                        className="nav-link",
                     ),
                     dbc.NavLink(
                         "Descriptive Analytics",
                         href="/analytics",
-                        active=True,
-                        style={
-                            "width": "100%",
-                            "font-size": "1rem",
-                            "color": "#FFFFFF",
-                        },
+                        # active=True,
+                        className="nav-link",
                     ),
                     dbc.NavLink(
                         "Clustering Analytics",
                         href="/clustering",
-                        active=True,
-                        style={
-                            "width": "100%",
-                            "font-size": "1rem",
-                            "color": "#FFFFFF",
-                        },
+                        # active=True,
+                        className="nav-link",
                     ),
                     dbc.NavLink(
                         "About Us",
                         href="/about",
-                        active=True,
-                        style={
-                            "width": "100%",
-                            "font-size": "1rem",
-                            "color": "#FFFFFF",
-                        },
+                        # active=True,
+                        className="nav-link:hover",
                     ),
                 ],
                 vertical=True,
                 pills=True,
-                className="nav nav-link:hover",
             ),
             html.Div(
                 [
                     dbc.Row(
                         dbc.Col(
-                            html.Div("Copyright © 2021", style={"font-size": "0.8rem"}),
-                            style={
-                                "right": "-10px",
-                                "bottom": "-600px",
-                                "width": "100%",
-                                # "height": "100%",
-                                # "object-fit": "cover",
-                            },
+                            html.Div("Copyright © 2021", className="copyright-text"),
+                            className="copyright-col",
                         ),
-                        style={"position": "absolute"},
+                        className="copyright-row",
                     ),
                 ]
             ),
         ],
-        style=SIDEBAR_STYLE,
+        className="sidebar-nav",
     )
     return sidebar
 

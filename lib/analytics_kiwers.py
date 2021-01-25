@@ -7,11 +7,17 @@ import dash_html_components as html
 
 import plotly.express as px
 
-from lib.data_engine.preprocessor import (dfkiwer_dates, dfkiwer_hours,
-                                          dfkiwer_days, dfkiwer_month,
-                                          dfkiwer_weeks, kiwer_map,
-                                          multiple_weekday, kiwers_dayxw,
-                                          kiwers_hxm)
+from lib.data_engine.preprocessor import (
+    dfkiwer_dates,
+    dfkiwer_hours,
+    dfkiwer_days,
+    dfkiwer_month,
+    dfkiwer_weeks,
+    kiwer_map,
+    multiple_weekday,
+    kiwers_dayxw,
+    kiwers_hxm,
+)
 
 app = __import__("app").app
 
@@ -25,7 +31,7 @@ radios_line_k = dbc.FormGroup(
                 options=[
                     {"label": "By date", "value": "By date"},
                     {"label": "By days", "value": "By days"},
-                    {"label": "By hours", "value": "By hours"}
+                    {"label": "By hours", "value": "By hours"},
                 ],
                 value="By date",
                 labelStyle={
@@ -49,7 +55,7 @@ radios_evo_k = dbc.FormGroup(
                     {"label": "Weekday by month", "value": "Weekday by month"},
                     {"label": "Hour by month", "value": "Hour by month"},
                     {"label": "Month by hour", "value": "Month by hour"},
-                    {"label": "Day by weeks", "value": "Day by weeks"}
+                    {"label": "Day by weeks", "value": "Day by weeks"},
                 ],
                 value="Weekday by month",
             ),
@@ -76,36 +82,22 @@ radios_bar_k = dbc.FormGroup(
     row=True,
 )
 
-div_style = {"border": "1px solid lightgrey",
-             "borderRadius": "5px",
-             "backgroundColor": "#FAFAFA",
-             "margin": "5px",
-             "padding": "26px 0px 0px 30px",
-             "boxShadow": "2px 2px 2px lightgrey",
-             }
-div_style_plot = {"border": "1px solid lightgrey",
-                  "borderRadius": "5px",
-                  "backgroundColor": "#FAFAFA",
-                  "margin": "5px",
-                  "padding": "26px 0px 0px 30px",
-                  "boxShadow": "2px 2px 2px lightgrey",
-                  }
-
 kiwers_layout = [
     dbc.Row(
         [
             dbc.Col(
                 html.Div(
                     radios_line_k,
-                    style=div_style,
+                    className="div-style-kiwer",
                 ),
-                md=4),
+                md=4,
+            ),
             dbc.Col(
                 html.Div(
                     dcc.Graph(id="plot-line-k"),
-                    style=div_style_plot,
+                    className="div-style-plot",
                 ),
-                md=8
+                md=8,
             ),
         ],
         align="center",
@@ -115,37 +107,38 @@ kiwers_layout = [
             dbc.Col(
                 html.Div(
                     radios_evo_k,
-                    style=div_style,
+                    className="div-style-kiwer",
                 ),
-                md=4
+                md=4,
             ),
             dbc.Col(
                 html.Div(
                     dcc.Graph(id="plot-evo-k"),
-                    style=div_style_plot,
+                    className="div-style-plot",
                 ),
-                md=8
-            )
+                md=8,
+            ),
         ],
-        align="center"
+        align="center",
     ),
     dbc.Row(
         [
             dbc.Col(
                 html.Div(
                     radios_bar_k,
-                    style=div_style,
+                    className="div-style-kiwer",
                 ),
-                md=4
+                md=4,
             ),
             dbc.Col(
                 html.Div(
                     dcc.Graph(id="plot-bar-k"),
-                    style=div_style_plot,
+                    className="div-style-plot",
                 ),
-                md=8)
+                md=8,
+            ),
         ],
-        align="center"
+        align="center",
     ),
     dbc.Row(dbc.Col(html.H3("Log Points"))),
     dbc.Row(dbc.Col(dcc.Graph(figure=kiwer_map))),
@@ -158,33 +151,56 @@ kiwers_layout = [
     Input("chart-type-line-k", "value"),
 )
 def update_output(chart_type):
-    plots = {'By date': {'df': dfkiwer_dates,
-                         'x': "Date",
-                         "y": "Logs",
-                         "title": "Total Logs by date"},
-             'By days': {'df': dfkiwer_days,
-                         'x': "Weekday",
-                         "y": "Logs",
-                         "title": "Total Logs by day"},
-             'By hours': {'df': dfkiwer_hours,
-                          'x': "Hour",
-                          "y": "Logs",
-                          "title": "Total Logs by hour"},
-             }
+    plots = {
+        "By date": {
+            "df": dfkiwer_dates,
+            "x": "Date",
+            "y": "Logs",
+            "title": "Total Logs by date",
+        },
+        "By days": {
+            "df": dfkiwer_days,
+            "x": "Weekday",
+            "y": "Logs",
+            "title": "Total Logs by day",
+        },
+        "By hours": {
+            "df": dfkiwer_hours,
+            "x": "Hour",
+            "y": "Logs",
+            "title": "Total Logs by hour",
+        },
+    }
 
-    fig = px.line(plots[chart_type]['df'],
-                  x=plots[chart_type]['x'],
-                  y=plots[chart_type]['y'],
-                  title=plots[chart_type]['title'],
-                  height=400,
-                  )
-    fig.update_layout({'plot_bgcolor': 'rgba(0, 0, 0, 0)',
-                       'paper_bgcolor': 'rgba(0, 0, 0, 0)',
-                       })
-    fig.update_xaxes(showgrid=True, gridwidth=1, gridcolor='LightGrey',
-                     zeroline=True, zerolinewidth=2, zerolinecolor='LightGrey')
-    fig.update_yaxes(showgrid=True, gridwidth=1, gridcolor='LightGrey',
-                     zeroline=True, zerolinewidth=2, zerolinecolor='LightGrey')
+    fig = px.line(
+        plots[chart_type]["df"],
+        x=plots[chart_type]["x"],
+        y=plots[chart_type]["y"],
+        title=plots[chart_type]["title"],
+        height=400,
+    )
+    fig.update_layout(
+        {
+            "plot_bgcolor": "rgba(0, 0, 0, 0)",
+            "paper_bgcolor": "rgba(0, 0, 0, 0)",
+        }
+    )
+    fig.update_xaxes(
+        showgrid=True,
+        gridwidth=1,
+        gridcolor="LightGrey",
+        zeroline=True,
+        zerolinewidth=2,
+        zerolinecolor="LightGrey",
+    )
+    fig.update_yaxes(
+        showgrid=True,
+        gridwidth=1,
+        gridcolor="LightGrey",
+        zeroline=True,
+        zerolinewidth=2,
+        zerolinecolor="LightGrey",
+    )
     return fig
 
 
@@ -194,48 +210,72 @@ def update_output(chart_type):
     Input("chart-type-evo-k", "value"),
 )
 def update_output(chart_type):
-    plots = {"Weekday by month":{'df': multiple_weekday,
-                                 'x': "month",
-                                 "y": "username",
-                                 "color": "weekday",
-                                 "labels": {'weekday': 'weekday', 'username': 'log', 'month': 'month'},
-                                 "title":"Evolution of weekday"},
-             "Hour by month": {'df': kiwers_hxm,
-                                'x': "month",
-                                "y": "username",
-                                "color": "hour",
-                                "labels": {'weekday': 'weekday', 'username': 'log', 'hour': 'hour'},
-                                "title":"Evolution of each hour by month"},
-             "Month by hour": {'df': kiwers_hxm,
-                                'x': "hour",
-                                "y": "username",
-                                "color": "month",
-                                "labels": {'weekday': 'weekday', 'username': 'log', 'hour': 'hour'},
-                                "title":"Evolution of month by hour"},
-             "Day by weeks": {'df': kiwers_dayxw,
-                              'x': "week",
-                              "y": "username",
-                              "color": "weekday",
-                              "labels": {'weekday': 'weekday', 'username': 'log', 'week': 'week'},
-                              "title": "Evolution of day by weeks"},
-
-             }
-    fig = px.line(plots[chart_type]['df'],
-                  x=plots[chart_type]['x'],
-                  y=plots[chart_type]['y'],
-                  color=plots[chart_type]['color'],
-                  labels=plots[chart_type]['labels'],
-                  title=plots[chart_type]['title'],
-                  height=400,
-                  )
-    fig.update_traces(hoverinfo='text+name', mode='lines+markers')
-    fig.update_layout({'plot_bgcolor': 'rgba(0, 0, 0, 0)',
-                       'paper_bgcolor': 'rgba(0, 0, 0, 0)',
-                       })
-    fig.update_xaxes(showgrid=True, gridwidth=1, gridcolor='LightGrey',
-                     zeroline=True, zerolinewidth=2, zerolinecolor='LightGrey')
-    fig.update_yaxes(showgrid=True, gridwidth=1, gridcolor='LightGrey',
-                     zeroline=True, zerolinewidth=2, zerolinecolor='LightGrey')
+    plots = {
+        "Weekday by month": {
+            "df": multiple_weekday,
+            "x": "month",
+            "y": "username",
+            "color": "weekday",
+            "labels": {"weekday": "weekday", "username": "log", "month": "month"},
+            "title": "Evolution of weekday",
+        },
+        "Hour by month": {
+            "df": kiwers_hxm,
+            "x": "month",
+            "y": "username",
+            "color": "hour",
+            "labels": {"weekday": "weekday", "username": "log", "hour": "hour"},
+            "title": "Evolution of each hour by month",
+        },
+        "Month by hour": {
+            "df": kiwers_hxm,
+            "x": "hour",
+            "y": "username",
+            "color": "month",
+            "labels": {"weekday": "weekday", "username": "log", "hour": "hour"},
+            "title": "Evolution of month by hour",
+        },
+        "Day by weeks": {
+            "df": kiwers_dayxw,
+            "x": "week",
+            "y": "username",
+            "color": "weekday",
+            "labels": {"weekday": "weekday", "username": "log", "week": "week"},
+            "title": "Evolution of day by weeks",
+        },
+    }
+    fig = px.line(
+        plots[chart_type]["df"],
+        x=plots[chart_type]["x"],
+        y=plots[chart_type]["y"],
+        color=plots[chart_type]["color"],
+        labels=plots[chart_type]["labels"],
+        title=plots[chart_type]["title"],
+        height=400,
+    )
+    fig.update_traces(hoverinfo="text+name", mode="lines+markers")
+    fig.update_layout(
+        {
+            "plot_bgcolor": "rgba(0, 0, 0, 0)",
+            "paper_bgcolor": "rgba(0, 0, 0, 0)",
+        }
+    )
+    fig.update_xaxes(
+        showgrid=True,
+        gridwidth=1,
+        gridcolor="LightGrey",
+        zeroline=True,
+        zerolinewidth=2,
+        zerolinecolor="LightGrey",
+    )
+    fig.update_yaxes(
+        showgrid=True,
+        gridwidth=1,
+        gridcolor="LightGrey",
+        zeroline=True,
+        zerolinewidth=2,
+        zerolinecolor="LightGrey",
+    )
     return fig
 
 
@@ -245,28 +285,49 @@ def update_output(chart_type):
     Input("chart-type-bar-k", "value"),
 )
 def update_output(chart_type):
-    plots = {'By month': {'df': dfkiwer_month,
-                          'x': "Month",
-                          "y": "Logs",
-                          "title": "Logs by month"},
-             'By week': {'df': dfkiwer_weeks,
-                         'x': "Week",
-                         "y": "Logs",
-                         "title": "Logs by week"},
-             }
+    plots = {
+        "By month": {
+            "df": dfkiwer_month,
+            "x": "Month",
+            "y": "Logs",
+            "title": "Logs by month",
+        },
+        "By week": {
+            "df": dfkiwer_weeks,
+            "x": "Week",
+            "y": "Logs",
+            "title": "Logs by week",
+        },
+    }
 
-    fig = px.bar(plots[chart_type]['df'],
-                 x=plots[chart_type]['x'],
-                 y=plots[chart_type]['y'],
-                 title=plots[chart_type]['title'],
-                 height=400,
-                 )
-    fig.update_layout({'plot_bgcolor': 'rgba(0, 0, 0, 0)',
-                       'paper_bgcolor': 'rgba(0, 0, 0, 0)',
-                       })
-    fig.update_xaxes(showgrid=True, gridwidth=1, gridcolor='LightGrey',
-                     zeroline=True, zerolinewidth=2, zerolinecolor='LightGrey')
-    fig.update_yaxes(showgrid=True, gridwidth=1, gridcolor='LightGrey',
-                     zeroline=True, zerolinewidth=2, zerolinecolor='LightGrey')
+    fig = px.bar(
+        plots[chart_type]["df"],
+        x=plots[chart_type]["x"],
+        y=plots[chart_type]["y"],
+        title=plots[chart_type]["title"],
+        height=400,
+    )
+    fig.update_layout(
+        {
+            "plot_bgcolor": "rgba(0, 0, 0, 0)",
+            "paper_bgcolor": "rgba(0, 0, 0, 0)",
+        }
+    )
+    fig.update_xaxes(
+        showgrid=True,
+        gridwidth=1,
+        gridcolor="LightGrey",
+        zeroline=True,
+        zerolinewidth=2,
+        zerolinecolor="LightGrey",
+    )
+    fig.update_yaxes(
+        showgrid=True,
+        gridwidth=1,
+        gridcolor="LightGrey",
+        zeroline=True,
+        zerolinewidth=2,
+        zerolinecolor="LightGrey",
+    )
 
     return fig
