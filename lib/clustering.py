@@ -15,6 +15,7 @@ from sklearn.cluster import KMeans
 from lib import navigation
 
 from .data_engine.preprocessor import dfkiwer, dforder
+from lib.cluster_orders_continous import cluster_orders_layout
 
 app = __import__("app").app
 
@@ -63,7 +64,7 @@ tab_c1_content = dbc.Card(
                         [
                             dbc.Col(
                                 html.Div(
-                                    "insert KIWERS CLUSTplots here",
+                                    cluster_orders_layout,
                                     className="layout-text",
                                 )
                             )
