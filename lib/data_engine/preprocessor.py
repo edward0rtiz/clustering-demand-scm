@@ -84,9 +84,9 @@ values_1 = {"kiwer": "AndresCamiloAriza"}
 dforder["bot_name"] = dforder["bot_name"].fillna(dforder["kiwer"])
 dforder.loc[
     (dforder["bot_name"] == "kiwibot204") & (dforder["kiwer"].isnull())
-    ] = dforder.loc[
+] = dforder.loc[
     (dforder["bot_name"] == "kiwibot204") & (dforder["kiwer"].isnull())
-    ].fillna(
+].fillna(
     value=values_1
 )
 dforder = dforder.dropna(subset=["kiwer"])
@@ -109,7 +109,7 @@ dforder["client_readable_address"] = dforder["client_readable_address"].ffill()
 
 # Create total price
 dforder["total_cost"] = (
-        dforder["price_with_discounts"] + dforder["delivey_fee"] + dforder["order_tax"]
+    dforder["price_with_discounts"] + dforder["delivey_fee"] + dforder["order_tax"]
 )
 
 # create weekday, month and hour
@@ -126,22 +126,22 @@ dforder["diff_closed"] = dforder["diff_closed"].dt.total_seconds() / 60
 conditions = [
     (
         (
-                (dforder["client_lat"] == dforder["restaurant_lat"])
-                & (dforder["client_lng"] == dforder["restaurant_lng"])
-                & (dforder["accepted_by_restaurant"].isna())
+            (dforder["client_lat"] == dforder["restaurant_lat"])
+            & (dforder["client_lng"] == dforder["restaurant_lng"])
+            & (dforder["accepted_by_restaurant"].isna())
         )
     ),
     (
         (
-                (dforder["client_lat"] != dforder["restaurant_lat"])
-                & (dforder["client_lng"] != dforder["restaurant_lng"])
-                & (dforder["accepted_by_restaurant"].isna())
+            (dforder["client_lat"] != dforder["restaurant_lat"])
+            & (dforder["client_lng"] != dforder["restaurant_lng"])
+            & (dforder["accepted_by_restaurant"].isna())
         )
     ),
     ((dforder["load_battery"] == 100) & (dforder["wait_battery"] == 100)),
     (
-            ((dforder["load_battery"] == 100) & (dforder["wait_battery"] == 100))
-            & (dforder["accepted_by_restaurant"] is None)
+        ((dforder["load_battery"] == 100) & (dforder["wait_battery"] == 100))
+        & (dforder["accepted_by_restaurant"] is None)
     ),
 ]
 values = ["canceled", "accepted", "error", "canceled"]
@@ -154,11 +154,17 @@ dforder["order_status"].replace({"0": "accepted"}, inplace=True)
 dforder["order_status"] = dforder.order_status.astype("category")
 
 # From coordinates get the city
-dforder['restaurant_city'] = reverse_geocode.search(dforder[['restaurant_lat', 'restaurant_lng']].values.tolist())
-dforder['restaurant_city'] = dforder.apply(lambda x: x['restaurant_city']['city'], axis=1)
+dforder["restaurant_city"] = reverse_geocode.search(
+    dforder[["restaurant_lat", "restaurant_lng"]].values.tolist()
+)
+dforder["restaurant_city"] = dforder.apply(
+    lambda x: x["restaurant_city"]["city"], axis=1
+)
 
-dforder['client_city'] = reverse_geocode.search(dforder[['client_lat', 'client_lng']].values.tolist())
-dforder['client_city'] = dforder.apply(lambda x: x['client_city']['city'], axis=1)
+dforder["client_city"] = reverse_geocode.search(
+    dforder[["client_lat", "client_lng"]].values.tolist()
+)
+dforder["client_city"] = dforder.apply(lambda x: x["client_city"]["city"], axis=1)
 
 # Convert readable datetime to datetime
 dfkiwer["readable_datetime"] = pd.to_datetime(dfkiwer["readable_datetime"])
@@ -177,12 +183,12 @@ dfkiwer["month"] = dfkiwer["readable_datetime"].dt.month
 ############ [Data Plot 1/9] Historial logs by dates ###############
 dfkiwer_dates = (
     dfkiwer["readable_datetime"]
-        .dt.date.rename_axis("Date")
-        .reset_index()
-        .sort_values("readable_datetime")
-        .value_counts("readable_datetime", sort=False)
-        .rename_axis("Date")
-        .reset_index(name="Logs")
+    .dt.date.rename_axis("Date")
+    .reset_index()
+    .sort_values("readable_datetime")
+    .value_counts("readable_datetime", sort=False)
+    .rename_axis("Date")
+    .reset_index(name="Logs")
 )
 
 ################ [Data Plot 2/9] Logs by day ###################
@@ -203,9 +209,9 @@ dfkiwer["weekday"] = pd.Categorical(
 
 dfkiwer_days = (
     dfkiwer["weekday"]
-        .value_counts(sort=False)
-        .rename_axis("Weekday")
-        .reset_index(name="Logs")
+    .value_counts(sort=False)
+    .rename_axis("Weekday")
+    .reset_index(name="Logs")
 )
 
 ############ [Data Plot 3/9] Evolution of Weekdays ###############
@@ -218,9 +224,9 @@ multiple_weekday = dfkiwer.groupby(by=["weekday", "month"], as_index=False)[
 # Create a dataframe with the kiwers total count per hours
 dfkiwer_hours = (
     dfkiwer["readable_datetime"]
-        .dt.hour.value_counts(sort=False)
-        .rename_axis("Hour")
-        .reset_index(name="Logs")
+    .dt.hour.value_counts(sort=False)
+    .rename_axis("Hour")
+    .reset_index(name="Logs")
 )
 
 ######## [Data Plot 5/9] Evolution of each hour by month ###############
@@ -232,15 +238,15 @@ kiwers_hxm = dfkiwer.groupby(by=["hour", "month"], as_index=False)["username"].c
 # Create a dataframe of kiwers month value counts
 dfkiwer_month = (
     dfkiwer.value_counts("month", sort=False)
-        .rename_axis("Month")
-        .reset_index(name="Logs")
+    .rename_axis("Month")
+    .reset_index(name="Logs")
 )
 
 ################ [Data Plot 7/9] Logs by week ###############
 dfkiwer_weeks = (
     dfkiwer.value_counts("week", sort=False)
-        .rename_axis("Week")
-        .reset_index(name="Logs")
+    .rename_axis("Week")
+    .reset_index(name="Logs")
 )
 
 ################ [Data Plot 8/9] Evolution of day by weeks #############
@@ -511,8 +517,8 @@ for cust in dfcust["client_id"].unique():
 
 df_type_client = (
     pd.Series(cust_dict)
-        .reset_index()
-        .rename(columns={"index": "Type of Client", 0: "Number of Clients"})
+    .reset_index()
+    .rename(columns={"index": "Type of Client", 0: "Number of Clients"})
 )
 df_type_client = df_type_client.assign(Client=["Client", "Client", "Client"])
 
@@ -593,8 +599,8 @@ dforder_dates = dforder.copy()
 dforder_dates["creation_date"] = dforder["created"].dt.date
 dforder_dates = (
     dforder_dates.groupby("creation_date", sort=True)
-        .sum()
-        .rename(columns={"client_is_prime": "orders"})
+    .sum()
+    .rename(columns={"client_is_prime": "orders"})
 )
 dforder_dates.index = pd.to_datetime(dforder_dates.index)
 
@@ -620,9 +626,9 @@ dforder["weekday"] = pd.Categorical(
 
 dforder_days = (
     dforder["weekday"]
-        .value_counts(sort=False)
-        .rename_axis("Weekday")
-        .reset_index(name="Orders")
+    .value_counts(sort=False)
+    .rename_axis("Weekday")
+    .reset_index(name="Orders")
 )
 
 ############################## [9/17 Plot] Orders by Hour ######################################
@@ -732,7 +738,7 @@ busiest_day = dforder["created"].dt.date.value_counts().reset_index()
 busiest_day = busiest_day.iloc[0]["index"]
 dforder_busiest_day = dforder[
     (dforder["type_of_delivery"] == "bot") & (dforder["created"].dt.date == busiest_day)
-    ]
+]
 dforder_busiest_day = (
     dforder_busiest_day.groupby(["hour"])["bot_name"].unique().str.len().reset_index()
 )
@@ -837,72 +843,64 @@ restaurant_summary.update_yaxes(
 # #
 # ###########################################################
 
-# Create a copy from dforder
-dforder['restaurant_city'] = reverse_geocode.search(dforder[['restaurant_lat', 'restaurant_lng']].values.tolist())
-dforder['restaurant_city'] = dforder.apply(lambda x: x['restaurant_city']['city'], axis=1)
-dforder['restaurant_city'].unique()
-
-dforder['client_city'] = reverse_geocode.search(dforder[['client_lat', 'client_lng']].values.tolist())
-dforder['client_city'] = dforder.apply(lambda x: x['client_city']['city'], axis=1)
-dforder['client_city'].unique()
-
 dfreg = dforder.copy()
 
-dfreg['hour'] = dfreg['hour'].astype('category')
-dfreg['week_no'] = dfreg['week_no'].astype('category')
-dfreg['month'] = dfreg['month'].astype('category')
+dfreg["hour"] = dfreg["hour"].astype("category")
+dfreg["week_no"] = dfreg["week_no"].astype("category")
+dfreg["month"] = dfreg["month"].astype("category")
 
-dfreg['accepted_by_restaurant'] = dfreg['accepted_by_restaurant'].fillna(
-    pd.Timedelta(seconds=0))
-dfreg['accepted_by_restaurant'] = dfreg['accepted_by_restaurant'].astype(str)
-dfreg['accepted_by_restaurant'] = dfreg['accepted_by_restaurant'].replace(
-    to_replace=r'[^0 days 00:00:00	]', value='1', regex=True)
-dfreg['accepted_by_restaurant'] = dfreg['accepted_by_restaurant'].replace(
-    to_replace=r'[0 days 00:00:00	]', value='0', regex=True)
-dfreg['accepted_by_restaurant'] = dfreg['accepted_by_restaurant'].str[:1]
+dfreg["accepted_by_restaurant"] = dfreg["accepted_by_restaurant"].fillna(
+    pd.Timedelta(seconds=0)
+)
+dfreg["accepted_by_restaurant"] = dfreg["accepted_by_restaurant"].astype(str)
+dfreg["accepted_by_restaurant"] = dfreg["accepted_by_restaurant"].replace(
+    to_replace=r"[^0 days 00:00:00	]", value="1", regex=True
+)
+dfreg["accepted_by_restaurant"] = dfreg["accepted_by_restaurant"].replace(
+    to_replace=r"[0 days 00:00:00	]", value="0", regex=True
+)
+dfreg["accepted_by_restaurant"] = dfreg["accepted_by_restaurant"].str[:1]
 
 # create price category
-dfreg.loc[((dfreg['total_cost'] > -15) &
-           (dfreg['total_cost'] <= 0)), 'price_cat'] = 1
-dfreg.loc[((dfreg['total_cost'] > 0) & (
-        dfreg['total_cost'] <= 5)), 'price_cat'] = 2
-dfreg.loc[((dfreg['total_cost'] > 5) & (
-        dfreg['total_cost'] <= 10)), 'price_cat'] = 3
-dfreg.loc[((dfreg['total_cost'] > 10) & (
-        dfreg['total_cost'] <= 15)), 'price_cat'] = 4
-dfreg.loc[((dfreg['total_cost'] > 15) & (
-        dfreg['total_cost'] <= 20)), 'price_cat'] = 5
-dfreg.loc[(dfreg['total_cost'] > 20), 'price_cat'] = 6
+dfreg.loc[((dfreg["total_cost"] > -15) & (dfreg["total_cost"] <= 0)), "price_cat"] = 1
+dfreg.loc[((dfreg["total_cost"] > 0) & (dfreg["total_cost"] <= 5)), "price_cat"] = 2
+dfreg.loc[((dfreg["total_cost"] > 5) & (dfreg["total_cost"] <= 10)), "price_cat"] = 3
+dfreg.loc[((dfreg["total_cost"] > 10) & (dfreg["total_cost"] <= 15)), "price_cat"] = 4
+dfreg.loc[((dfreg["total_cost"] > 15) & (dfreg["total_cost"] <= 20)), "price_cat"] = 5
+dfreg.loc[(dfreg["total_cost"] > 20), "price_cat"] = 6
 
 # crete price_cat_log
-dfreg['price_cat'] = dfreg['price_cat'].astype('category')
-dfreg.loc[((dfreg['price_cat'] == 1) | (dfreg['price_cat'] == 2)
-           | (dfreg['price_cat'] == 3)), 'price_cat_log'] = 0
-dfreg.loc[((dfreg['price_cat'] == 4) | (dfreg['price_cat'] == 5)
-           | (dfreg['price_cat'] == 6)), 'price_cat_log'] = 1
+dfreg["price_cat"] = dfreg["price_cat"].astype("category")
+dfreg.loc[
+    ((dfreg["price_cat"] == 1) | (dfreg["price_cat"] == 2) | (dfreg["price_cat"] == 3)),
+    "price_cat_log",
+] = 0
+dfreg.loc[
+    ((dfreg["price_cat"] == 4) | (dfreg["price_cat"] == 5) | (dfreg["price_cat"] == 6)),
+    "price_cat_log",
+] = 1
 
 # convert columns to categorical
-dfreg['price_cat'] = dfreg['price_cat'].astype('category')
-dfreg['client_is_prime'] = dfreg['client_is_prime'].astype('category')
-dfreg['month'] = dfreg['month'].astype('category')
-dfreg['weekday'] = dfreg['weekday'].astype('category')
-dfreg['price_cat_log'] = dfreg['price_cat_log'].astype('category')
-dfreg['accepted_by_restaurant'] = dfreg['accepted_by_restaurant'].astype(
-    'category')
+dfreg["price_cat"] = dfreg["price_cat"].astype("category")
+dfreg["client_is_prime"] = dfreg["client_is_prime"].astype("category")
+dfreg["month"] = dfreg["month"].astype("category")
+dfreg["weekday"] = dfreg["weekday"].astype("category")
+dfreg["price_cat_log"] = dfreg["price_cat_log"].astype("category")
+dfreg["accepted_by_restaurant"] = dfreg["accepted_by_restaurant"].astype("category")
 
 # create category codes
-dfreg['client_cat'] = dfreg.client_is_prime.cat.codes
-dfreg['price_cat'] = dfreg.price_cat.cat.codes
-dfreg['cat_delivery'] = dfreg.type_of_delivery.cat.codes
-dfreg['cat_payment'] = dfreg.payment_method.cat.codes
-dfreg['cat_status'] = dfreg.order_status.cat.codes
-dfreg['cat_weekday'] = dfreg.weekday.cat.codes
-dfreg['cat_month'] = dfreg.month.cat.codes
-dfreg['price_cat_log'] = dfreg.price_cat_log.cat.codes
-dfreg['accepted_by_restaurant'] = dfreg.accepted_by_restaurant.cat.codes
+dfreg["client_cat"] = dfreg.client_is_prime.cat.codes
+dfreg["price_cat"] = dfreg.price_cat.cat.codes
+dfreg["cat_delivery"] = dfreg.type_of_delivery.cat.codes
+dfreg["cat_payment"] = dfreg.payment_method.cat.codes
+dfreg["cat_status"] = dfreg.order_status.cat.codes
+dfreg["cat_weekday"] = dfreg.weekday.cat.codes
+dfreg["cat_month"] = dfreg.month.cat.codes
+dfreg["price_cat_log"] = dfreg.price_cat_log.cat.codes
+dfreg["accepted_by_restaurant"] = dfreg.accepted_by_restaurant.cat.codes
 
 # Add intercept
-dfreg['Intercept'] = 1
+dfreg["Intercept"] = 1
 
 # ###########################################################
 # #
@@ -914,10 +912,25 @@ dfreg['Intercept'] = 1
 dforder_cluster = dfreg.copy()
 
 # dataframe for clusterization model1
-cols = ['order_id', 'client_lat', 'client_lng', 'restaurant_lat',
-        'restaurant_lng', 'price_with_discounts', 'delivey_fee', 'order_tip',
-        'total_cost', 'hour', 'week_no', 'month', 'delivery_time', 'wait_lat',
-        'wait_lng', 'client_city', 'restaurant_city']
+cols = [
+    "order_id",
+    "client_lat",
+    "client_lng",
+    "restaurant_lat",
+    "restaurant_lng",
+    "price_with_discounts",
+    "delivey_fee",
+    "order_tip",
+    "total_cost",
+    "hour",
+    "week_no",
+    "month",
+    "delivery_time",
+    "wait_lat",
+    "wait_lng",
+    "client_city",
+    "restaurant_city",
+]
 dforder_cluster1 = dforder_cluster[cols]
 
 # # dataframe for clusterization model2
@@ -929,23 +942,27 @@ dforder_cluster1 = dforder_cluster[cols]
 # Clean for waiting time
 dforder_cluster1 = dforder_cluster1.dropna()
 
-dforder_cluster1['wait_city'] = reverse_geocode.search(dforder_cluster1[['wait_lat', 'wait_lng']].values.tolist())
-dforder_cluster1['wait_city'] = dforder_cluster1.apply(lambda x: x['wait_city']['city'], axis=1)
+dforder_cluster1["wait_city"] = reverse_geocode.search(
+    dforder_cluster1[["wait_lat", "wait_lng"]].values.tolist()
+)
+dforder_cluster1["wait_city"] = dforder_cluster1.apply(
+    lambda x: x["wait_city"]["city"], axis=1
+)
 
 # Define city
-selected_city = 'Berkeley'
-city = dforder_cluster1[(dforder_cluster1['client_city'] == selected_city) & \
-                        (dforder_cluster1['restaurant_city'] == selected_city) & \
-                        (dforder_cluster1['wait_city'] == selected_city) & \
-                        (dforder_cluster1['total_cost'] > 0)]
+selected_city = "Berkeley"
+city = dforder_cluster1[
+    (dforder_cluster1["client_city"] == selected_city)
+    & (dforder_cluster1["restaurant_city"] == selected_city)
+    & (dforder_cluster1["wait_city"] == selected_city)
+    & (dforder_cluster1["total_cost"] > 0)
+]
 
 
 def elbow_method(df=None):
     """Find the suggested number of clusters and plot the elbow diagram.
-
     args:
         df (pd.Dataframe): 2 columns dataframe
-
     returns:
         (k, fig) (int, go figure); (number of clusters, figure to plot)
     """
@@ -967,12 +984,9 @@ def elbow_method(df=None):
 
 def simple_cluster(K=1, df=None):
     """Create and assign cluster to each point of datadrame.
-
     args:
       K (int): number of clusters.
       df (pd.Dataframe): 2 columns dataframe to clusterize.
-
-
     returns:
       px map figure
     """
@@ -980,21 +994,22 @@ def simple_cluster(K=1, df=None):
     # Assign how many clusters (k-number) you would like to have
     K = K
 
-    kmeans_model = KMeans(n_clusters=K, init='k-means++').fit(df)
+    kmeans_model = KMeans(n_clusters=K, init="k-means++").fit(df)
     kmeans_model.inertia_
 
     # Iterative procedure to learn labels
     labels = kmeans_model.predict(df)
 
-    df['cluster'] = pd.Series(labels, index=df.index)
+    df["cluster"] = pd.Series(labels, index=df.index)
 
-    fig = px.scatter_mapbox(df,
-                            lat=df.columns[0],
-                            lon=df.columns[1],
-                            color='cluster',
-                            opacity=0.6,
-                            zoom=13,
-                            )
+    fig = px.scatter_mapbox(
+        df,
+        lat=df.columns[0],
+        lon=df.columns[1],
+        color="cluster",
+        opacity=0.6,
+        zoom=13,
+    )
     fig.update_layout(mapbox_style="open-street-map")
     fig.update_layout(margin={"r": 0, "t": 0, "l": 0, "b": 0})
 
