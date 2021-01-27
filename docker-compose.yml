@@ -9,7 +9,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: kiwibot_dash
+    container_name: kiwibotdash
     command: python index.py
     volumes:
       - .:/code
