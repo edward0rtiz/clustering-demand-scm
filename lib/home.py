@@ -5,6 +5,10 @@ import dash
 import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
+from dash.dependencies import Input, Output, State
+import time
+
+app = __import__("app").app
 
 
 SRC_VIDEO = "https://bit.ly/3o6VBuc"
@@ -13,7 +17,16 @@ home_layout = dbc.Container(
         dbc.Row(
             [
                 html.Div(
-                    [
+                    children=[
+                        html.Div(
+                            dcc.Loading(
+                                id="input-1",
+                                children=[html.Div(id="output-1")],
+                                type="default",
+                                color="#000000",
+                                fullscreen=True,
+                            ),
+                        ),
                         dbc.Col(
                             [
                                 dbc.Row(
@@ -53,11 +66,17 @@ home_layout = dbc.Container(
                                 ),
                             ],
                             width=30,
-                        )
-                    ]
+                        ),
+                    ],
                 )
             ]
         ),
     ],
     fluid=True,
 )
+
+
+@app.callback(Output("output-1", "children"), [Input("input-1", "value")])
+def input_triggers_spinner(value):
+    time.sleep(2)
+    return value
