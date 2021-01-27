@@ -1,5 +1,6 @@
 import os
 import pathlib
+import time
 
 import dash
 import dash_bootstrap_components as dbc
@@ -13,9 +14,9 @@ from sklearn import datasets
 from sklearn.cluster import KMeans
 
 from lib import navigation
+from lib.cluster_orders_continous import cluster_orders_layout
 
 from .data_engine.preprocessor import dfkiwer, dforder
-from lib.cluster_orders_continous import cluster_orders_layout
 
 app = __import__("app").app
 
@@ -32,7 +33,20 @@ Ipsum"""
 
 layout_2 = dbc.Container(
     [
-        html.H1("Clustering Reporting"),
+        html.Div(
+            children=[
+                html.Div(
+                    dcc.Loading(
+                        id="input-3",
+                        children=[html.Div(id="output-3")],
+                        type="default",
+                        color="#000000",
+                        fullscreen=True,
+                    )
+                ),
+                html.H1("Clustering Reporting"),
+            ]
+        ),
     ],
     fluid=True,
 )
@@ -153,3 +167,9 @@ def toggle_collapse_4(n, is_open):
 
 
 c_layout = html.Div([layout_2, clustering_tab])
+
+
+@app.callback(Output("output-3", "children"), [Input("input-3", "value")])
+def input_triggers_spinner3(value):
+    time.sleep(3)
+    return value
