@@ -206,3 +206,6 @@ a {
     margin-top: 10px;
  }
  
+ .loader-wrapper > div {
+    visibility: visible !important;
+}
