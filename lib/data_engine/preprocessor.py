@@ -2,6 +2,8 @@ import io
 import os
 from datetime import datetime
 
+from lib.data_engine.s3_download_all import download_s3_folder
+
 import numpy as np
 import pandas as pd
 import plotly.express as px
@@ -9,7 +11,7 @@ import plotly.graph_objects as go
 import plotly.figure_factory as ff
 from plotly.subplots import make_subplots
 
-# from .s3_download_all import df_kiwer, df_order
+# from .s3_download_all import df_kiwer, df_order, berkeley_csv
 from sklearn import preprocessing
 from kmodes.kmodes import KModes
 from sklearn.cluster import KMeans
@@ -28,9 +30,19 @@ import reverse_geocode
 kiwers = "data/kiwersDB.csv"
 orders = "data/ordersDB.csv"
 berkeley_csv = "data/berkeley_cleaned.csv"
-df_kiwer = pd.read_csv(kiwers)
-df_order = pd.read_csv(orders)
-ber = pd.read_csv(berkeley_csv)
+try:
+    df_kiwer = pd.read_csv(kiwers)
+    df_order = pd.read_csv(orders)
+    ber = pd.read_csv(berkeley_csv)
+except FileNotFoundError:
+    bucket = "kiwi-bot"
+    s3_folder = "databases_csv/"
+    filepath = "../../data"
+    download_s3_folder(bucket_name=bucket, s3_folder=s3_folder, local_dir=filepath)
+
+    df_kiwer = pd.read_csv(kiwers)
+    df_order = pd.read_csv(orders)
+    ber = pd.read_csv(berkeley_csv)
 
 # Drop Unnamed: 0 for df_order
 df_order = df_order.drop(["Unnamed: 0"], axis=1)
@@ -963,9 +975,9 @@ def elbow_method(df=None):
 
     kl = KneeLocator(range(1, 11), sum_sq_d, curve="convex", direction="decreasing")
 
-    fig = go.Figure(data=go.Scatter(x=K, y=sum_sq_d))
+    number_clusters = kl.elbow
 
-    return kl.elbow
+    return number_clusters
 
 
 def simple_cluster(K=1, df=None):

@@ -1,6 +1,8 @@
 import dash
 from dash.dependencies import Input, Output
 
+import time
+
 import dash_core_components as dcc
 import dash_bootstrap_components as dbc
 import dash_html_components as html
@@ -71,7 +73,11 @@ cluster_orders_layout = [
         ],
     ),
     dbc.Row(dbc.Col(dcc.Graph(id="plot-preview"))),
-    dbc.Row(dbc.Col(html.Div(id="recommended-clusters"))),
+    dcc.Loading(id="loading-icon",
+                children=[html.Div()],
+                type="default",
+                color='#000000',
+                className='loader-wrapper'),
     dbc.Row(dbc.Col(html.Div(number_k_input))),
     dbc.Row(dbc.Col(html.Div(dcc.Graph(id="plot-cluster")))),
     html.Div(id="df-cache", style={'display': 'none'})
@@ -137,7 +143,7 @@ def update_plot1(cached_df, cluster_type, selected_city):
 
 # Suggest number of cluster
 @app.callback(
-    Output("recommended-clusters", "children"),
+    Output("loading-icon", "children"),
     [Input("df-cache", "children"),
      Input("radioitems-inline-location", "value"), ]
 )

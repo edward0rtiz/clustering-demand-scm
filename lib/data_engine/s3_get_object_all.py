@@ -33,5 +33,5 @@ def get_all_objects(bucket, prefix):
     yield from tuple(df_list)
 
 
-df_kiwer, df_order = get_all_objects(bucket=bucket, prefix=prefix)
+df_kiwer, df_order, berkeley_cleaned = get_all_objects(bucket=bucket, prefix=prefix)
 print("Files succesfully loaded")

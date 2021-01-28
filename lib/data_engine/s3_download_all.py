@@ -11,8 +11,8 @@ AWS_SECRET = os.environ.get("AWS_SECRET_ACCESS_KEY")
 
 # Information of origin bucket and directory to download files
 bucket = "kiwi-bot"
-s3_folder = "data/"
-filepath = "/data"
+s3_folder = "databases_csv/"
+filepath = "../../data"
 
 s3 = boto3.resource(
     "s3",
@@ -46,4 +46,4 @@ def download_s3_folder(bucket_name, s3_folder, local_dir=None):
         print(f"file succesfully downloaded: {target[14:]}")
 
 
-download_s3_folder(bucket_name=bucket, s3_folder=s3_folder, local_dir=filepath)
+# download_s3_folder(bucket_name=bucket, s3_folder=s3_folder, local_dir=filepath)

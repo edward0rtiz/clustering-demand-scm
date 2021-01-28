@@ -14,6 +14,7 @@ from sklearn import datasets
 from sklearn.cluster import KMeans
 
 from lib import navigation
+from lib.clusters_foursquare import cluster_foursquare
 from lib.cluster_orders_continous import cluster_orders_layout
 
 from .data_engine.preprocessor import dfkiwer, dforder
@@ -120,7 +121,7 @@ tab_c2_content = dbc.Card(
                         [
                             dbc.Col(
                                 html.Div(
-                                    "insert ORDERS CLUSTplots here",
+                                    cluster_foursquare,
                                     className="layout-text",
                                 )
                             )
