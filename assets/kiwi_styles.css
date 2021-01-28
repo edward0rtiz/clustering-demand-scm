@@ -15,7 +15,6 @@ html {
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   }
 
-
 /* navigation */
 .sidebar-nav{
     position: fixed;
@@ -147,7 +146,8 @@ a {
     border: 1px solid lightgrey;
     border-radius: 5px;
     background-color: #FAFAFA;
-    margin: 5px;
+    margin-top: 10px;
+    margin-bottom: 10PX;
     padding: 16px 0px 0px 30px;
     box-shadow: 2px 2px 2px lightgrey;
 }
@@ -166,7 +166,8 @@ a {
     border: 1px solid rgb(160, 159, 159);
     border-radius: 5px;
     background-color: #fafafa;
-    margin: 5px;
+    margin-top: 5px;
+    margin-bottom: 10PX;
     padding: 16px 0px 0px 30px;
     box-shadow: 2px 2px 2px rgb(160, 159, 159);
 }
@@ -199,3 +200,9 @@ a {
 .layout-text{
     color:#000000;
 }
+
+.margin-plot{
+    margin-bottom: 10px;
+    margin-top: 10px;
+ }
+ 

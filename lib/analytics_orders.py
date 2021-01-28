@@ -95,6 +95,7 @@ orders_layout = [
                                 className="div-style",
                             )
                         ),
+                        className="margin-plot",
                     ),
                 ],
                 width=6,
@@ -134,7 +135,8 @@ orders_layout = [
                     )
                 ]
             )
-        ]
+        ],
+        # className="margin-plot",
     ),
     dbc.Row(
         [

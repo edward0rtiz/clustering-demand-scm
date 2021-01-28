@@ -1,5 +1,6 @@
 import os
 import pathlib
+import time
 
 import dash
 import dash_bootstrap_components as dbc
@@ -14,11 +15,10 @@ from sklearn import datasets
 from sklearn.cluster import KMeans
 
 from lib import navigation
-
-from .data_engine.preprocessor import dfkiwer, dforder
-
 from lib.analytics_kiwers import kiwers_layout
 from lib.analytics_orders import orders_layout
+
+from .data_engine.preprocessor import dfkiwer, dforder
 
 app = __import__("app").app
 
@@ -34,7 +34,20 @@ Ipsum"""
 
 layout_1 = dbc.Container(
     [
-        html.H1("Descriptive Reporting"),
+        html.Div(
+            children=[
+                html.Div(
+                    dcc.Loading(
+                        id="input-2",
+                        children=[html.Div(id="output-2")],
+                        type="default",
+                        color="#000000",
+                        fullscreen=True,
+                    )
+                ),
+                html.H1("Descriptive Reporting"),
+            ]
+        ),
     ],
     fluid=True,
 )
@@ -156,3 +169,9 @@ def toggle_collapse_2(n, is_open):
 
 
 a_layout = html.Div([layout_1, analytics_tab])
+
+
+@app.callback(Output("output-2", "children"), [Input("input-2", "value")])
+def input_triggers_spinner2(value):
+    time.sleep(3)
+    return value
