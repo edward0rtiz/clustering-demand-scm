@@ -13,5 +13,6 @@ services:
     command: python index.py
     volumes:
       - .:/code
+    working_dir : /workspace
     ports:
       - "80:8050"
