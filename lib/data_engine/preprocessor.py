@@ -27,8 +27,10 @@ import reverse_geocode
 # Call databased from data dir
 kiwers = "data/kiwersDB.csv"
 orders = "data/ordersDB.csv"
+berkeley_csv = "data/berkeley_cleaned.csv"
 df_kiwer = pd.read_csv(kiwers)
 df_order = pd.read_csv(orders)
+ber = pd.read_csv(berkeley_csv)
 
 # Drop Unnamed: 0 for df_order
 df_order = df_order.drop(["Unnamed: 0"], axis=1)
@@ -36,6 +38,7 @@ df_order = df_order.drop(["Unnamed: 0"], axis=1)
 # create a copy of the data extracted from S3
 dfkiwer = df_kiwer.copy()
 dforder = df_order.copy()
+berkeley = ber.copy()
 
 # Deleting unnecesary cols
 dfkiwer = dfkiwer.drop(["epoch_timestamp"], axis=1)
@@ -171,7 +174,7 @@ dfkiwer["readable_datetime"] = pd.to_datetime(dfkiwer["readable_datetime"])
 
 # Extract relevant information from date and time to perform EDA
 dfkiwer["weekday"] = dfkiwer["readable_datetime"].dt.day_name()
-dfkiwer["week"] = dfkiwer["readable_datetime"].dt.week
+dfkiwer["week"] = dfkiwer["readable_datetime"].dt.isocalendar().week
 dfkiwer["month"] = dfkiwer["readable_datetime"].dt.month
 
 ############ [Data Plot 1/9] Historial logs by dates ###############
@@ -999,3 +1002,86 @@ def simple_cluster(K=1, df=None):
     fig.update_layout(margin={"r": 0, "t": 0, "l": 0, "b": 0})
 
     return fig
+
+
+##################################################################
+#########             Analysis for city              #############
+##################################################################
+map_neighborhood = px.scatter_mapbox(berkeley[berkeley['neighborhood'].notna()],
+                                     lat="lat",
+                                     lon="lng",
+                                     hover_name="city",
+                                     hover_data=["name"],
+                                     color='neighborhood',
+                                     zoom=11,
+                                     title="Berkeley Neighborhoods"
+                                     )
+map_neighborhood.update_layout(mapbox_style="open-street-map")
+map_neighborhood.update_layout(margin={"r": 0, "t": 0, "l": 0, "b": 0})
+
+berkeley['category'] = berkeley['category'].astype('category')
+berkeley['postal_code'] = berkeley['postal_code'].astype('category')
+berkeley['neighborhood'] = berkeley['neighborhood'].astype('category')
+
+berkeley2 = pd.get_dummies(berkeley[['category']], prefix='', prefix_sep='')
+berkeley2['neighborhood'] = berkeley['neighborhood']
+berkeley2.drop(['neighborhood'], axis=1, inplace=True)
+berkeley2.insert(loc=0, column='neighborhood', value=berkeley['neighborhood'])
+
+berkeley3 = berkeley2.groupby('neighborhood').mean().reset_index()
+
+
+def most_common_venues(row, top_venues):
+    row_categories = row.iloc[1:]
+    row_categories_sorted = row_categories.sort_values(ascending=False)
+
+    return row_categories_sorted.index.values[0:top_venues]
+
+
+top10 = 10
+columns = ['neighborhood']
+indicator = ['ST', 'MD', 'RD']
+
+for ind in np.arange(top10):
+    try:
+        columns.append('{}{} Most Common Venue'.format(ind + 1, indicator[ind]))
+    except:
+        columns.append('{}th Most Common Venue'.format(ind + 1))
+
+berkeley_merge = pd.DataFrame(columns=columns)
+berkeley_merge['neighborhood'] = berkeley3['neighborhood']
+
+for ind in np.arange(berkeley3.shape[0]):
+    berkeley_merge.iloc[ind, 1:] = most_common_venues(berkeley3.iloc[ind, :], top10)
+
+clusters = 4
+
+berkeley_cluster = berkeley3.drop('neighborhood', axis=1)
+berkeley_kmeans = KMeans(n_clusters=clusters).fit(berkeley_cluster)
+# berkeley_kmeans.inertia_
+
+# Iterative procedure to learn labels
+labels = berkeley_kmeans.predict(berkeley_cluster)
+# labels[:11]
+# berkeley_cluster['labels'] = labels
+
+# berkeley_cluster
+berkeley_kmeans.labels_[:10]
+
+berkeley_merge.insert(0, 'labels', berkeley_kmeans.labels_)
+
+final_berkeley = berkeley.copy()
+final_berkeley = final_berkeley.join(berkeley_merge.set_index('neighborhood'), on='neighborhood')
+final_berkeley = final_berkeley.drop(columns=['id', 'state', "Unnamed: 0"], axis=1)
+
+# clusters
+map_city_clusters = px.scatter_mapbox(final_berkeley,
+                                      lat="lat",
+                                      lon="lng",
+                                      hover_name="category",
+                                      hover_data=["name"],
+                                      color='labels',
+                                      zoom=11,
+                                      title='Clustering')
+map_city_clusters.update_layout(mapbox_style="open-street-map")
+map_city_clusters.update_layout(margin={"r": 0, "t": 0, "l": 0, "b": 0})
