@@ -35,11 +35,13 @@ home_layout = dbc.Container(
                                             "Kiwibot Analytical Dashboard",
                                             className="home-title",
                                         ),
-                                        html.H4(
-                                            "KAD is a tool for get comprehensive analytics about kiwibot\
+                                        html.H4("KAD is a tool for get comprehensive analytics about kiwibot\
                                                 business and create strategies for supply the demand of kiwibots\
-                                                    in key areas based in a cluster prediction of hot spot zones.\
-                                                        To use this tool select in the navigation bar the ",
+                                                in key areas based in a cluster prediction of hot spot zones.\
+                                                To use this tool select in the navigation bar the insights you want\
+                                                to explore and get the information updated in real-time.\
+                                                If you want to download a report based on the insights gathered\
+                                                click in the button below",
                                             className="home-subtitle",
                                         ),
                                     ],
@@ -56,8 +58,6 @@ home_layout = dbc.Container(
                                         "margin": "auto",
                                         "width": "100%",
                                         "height": "-80%",
-                                        #     "right": "-100%",
-                                        # "bottom": "-100%",
                                         "top": "200%",
                                         "left": "-0.6%",
                                         "object-fit": "cover",
