@@ -177,7 +177,7 @@ dfkiwer["readable_datetime"] = pd.to_datetime(dfkiwer["readable_datetime"])
 
 # Extract relevant information from date and time to perform EDA
 dfkiwer["weekday"] = dfkiwer["readable_datetime"].dt.day_name()
-dfkiwer["week"] = dfkiwer["readable_datetime"].dt.week
+dfkiwer["week"] = dfkiwer["readable_datetime"].dt.isocalendar().week
 dfkiwer["month"] = dfkiwer["readable_datetime"].dt.month
 
 ############ [Data Plot 1/9] Historial logs by dates ###############
