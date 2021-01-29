@@ -35,13 +35,11 @@ home_layout = dbc.Container(
                                             "Kiwibot Analytical Dashboard",
                                             className="home-title",
                                         ),
-                                        html.H4("KAD is a tool for get comprehensive analytics about kiwibot\
+                                        html.H4("KAD is a tool to get comprehensive analytics about kiwibot\
                                                 business and create strategies for supply the demand of kiwibots\
                                                 in key areas based in a cluster prediction of hot spot zones.\
                                                 To use this tool select in the navigation bar the insights you want\
-                                                to explore and get the information updated in real-time.\
-                                                If you want to download a report based on the insights gathered\
-                                                click in the button below",
+                                                to explore and get the information updated in real-time.",
                                             className="home-subtitle",
                                         ),
                                     ],

@@ -22,15 +22,12 @@ from .data_engine.preprocessor import dfkiwer, dforder
 app = __import__("app").app
 
 
-more_info_text = """Lorem Ipsum is simply dummy text of the printing and 
-typesetting industry. Lorem Ipsum has been the industry's standard dummy 
-text ever since the 1500s, when an unknown printer took a galley of type 
-and scrambled it to make a type specimen book. It has survived not only 
-five centuries, but also the leap into electronic typesetting, remaining 
-essentially unchanged. It was popularised in the 1960s with the release 
-of Letraset sheets containing Lorem Ipsum passages, and more recently with 
-desktop publishing software like Aldus PageMaker including versions of Lorem 
-Ipsum"""
+more_info_text_3 = "In this section you will find a clusterization model regarding the\
+ restuaurants registered, clients and dropoff locations of the deliveries."
+
+more_info_text_4 = " In this section you will categorical information clusterized of the\
+ food industry. This cluster will show the top 10 venues and the behavior of the market at\
+ Berkeley."
 
 layout_2 = dbc.Container(
     [
@@ -67,7 +64,7 @@ tab_c1_content = dbc.Card(
                     html.Hr(),
                     dbc.Collapse(
                         dbc.Card(
-                            dbc.CardBody(more_info_text, className="card-analytics"),
+                            dbc.CardBody(more_info_text_3, className="card-analytics"),
                         ),
                         id="collapse-3",
                     ),
@@ -109,7 +106,7 @@ tab_c2_content = dbc.Card(
                     html.Hr(),
                     dbc.Collapse(
                         dbc.Card(
-                            dbc.CardBody(more_info_text, className="card-analytics"),
+                            dbc.CardBody(more_info_text_4, className="card-analytics"),
                         ),
                         id="collapse-4",
                     ),
