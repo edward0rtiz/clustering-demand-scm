@@ -75,6 +75,7 @@ about_layout = dbc.Container(
                                             className="icon-mail",
                                         )
                                     ],
+                                    size="lg",
                                     outline=True,
                                     color="dark",
                                     className="mail-marg",
@@ -114,6 +115,7 @@ about_layout = dbc.Container(
                                             className="icon-mail",
                                         )
                                     ],
+                                    size="lg",
                                     outline=True,
                                     color="dark",
                                     className="mail-marg",

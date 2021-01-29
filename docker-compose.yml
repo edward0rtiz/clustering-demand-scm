@@ -9,10 +9,9 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: kiwibotdash
+    container_name: kiwibot-kda
     command: python index.py
     volumes:
       - .:/code
-    working_dir : /workspace
     ports:
       - "80:8050"
