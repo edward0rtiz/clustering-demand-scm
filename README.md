@@ -60,6 +60,22 @@ aws_access_key_id=YOUR_ACCESS_KEY_HERE
 aws_secret_access_key=YOUR_SECRET_ACCESS_KEY
 ```
 
+# Key directories / files
+
+#### assets: 
+Frontend static files.
+
+#### data: 
+CSV files storage.
+
+#### lib:
+Contains layouts and callbacks of dash/dash_bootstrap components.
+
+#### lib/data_engine:
+* preprocessor: load, clean and process the csv files.
+* s3_download/s3_download_all: download csv files from aws s3.
+* s3_get_object/s3_object_all: read csv files from aws s3.
+
 # Stack
 
 KAD uses a number of tools, frameworks and libraries to work properly
